@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Smart Checklists | Blood Transfusion Process</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body class="container">
+	<!-- Header with title and agent name -->
+	<header class="mt10">
+		<div class="row">
+			<div class="col-lg-4">
+				<b>Nurse:</b> Lamoureux, Erin
+			</div>
+			<div class="col-lg-4 col-md-4">
+				<h4 class="text-center">Smart Checklist</h4>
+			</div>
+			<div class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 pull-right ">
+				<a href="agent.html">Logout
+				<span class="glyphicon glyphicon-log-out"></span>
+				</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- Patient info section with image and stats -->
+	<section id="patient-info" class="section bg-gray">
+		<div class="row">
+			<div class="col-lg-3 col-md-3">
+				<img src="img/blankPerson.png" alt="Patient Profile Picture" class="img-responsive">
+			</div>
+
+			<div class="col-lg-9 col-md-9">
+				<div class="col-lg-5 col-md-5">
+					<h3>Geary, Margaret</h3>
+					<h4><b>Gender:</b> Female</h4>
+					<h4><b>Date of Birth:</b> 07/03/1926</h4>
+					<h4><b>Age:</b> 89 years</h4>
+					<h4><b>MRN:</b> 51667154</h4>
+					<h4><b>Room:</b> 204</h4>
+				</div>
+				<div class="col-lg-7 col-md-7">
+					<div class="col-lg-6 col-md-6">
+						<h4><b>HR</b> <span id="heart-rate">78</span></h4>
+						<h4><b>TEMP</b> 37.2 &deg;C</h4>
+						<h4><b>PULSE PRESSURE</b> 37</h4>
+					</div>
+					<div class="col-lg-6 col-md-6">
+						<h4><b>SYS/DIAS</b> 117/80</h4>
+						<h4><b>SpO2%</b> 98</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Process title and status -->
+	<section id="process-info" class="section bg-dark-green">
+		<div class="row">
+			<div class="col-lg-8 col-md-8">
+				<h4 style="text-transform: uppercase;">Transfer one unit of packed red blood cells (PRBCS)</h4>
+			</div>
+			<div class="col-lg-3 col-md-3">
+				<h4><i>In-progress</i></h4>
+			</div>
+			<div class="col-lg-1 col-md-1">
+				<img src="img/info.png" alt="Info button" class="info-button" id="process-info-button">
+			</div>
+		</div>
+	</section>
+
+	<!-- Process tasks -->
+	<section class="mt10">
+		<div class="scroll-box container" id="main-task-container">
+		</div>
+	</section>
+
+	<!-- Process Steps Info -->
+	<div id="process-info-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Process Steps</h4>
+
+					<hr>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse1">Review pertinent patient history and blood transfusion order</a>
+								</h4>
+							</div>
+							<div id="collapse1" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Review patient history</li>
+									<li class="list-group-item">Confirm that order is complete (e.g. includes infusion rate)</li>
+									<li class="list-group-item">Know rationale for blood transfusion</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse2">Perform pre-infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse2" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Confirm presence of informed consent</li>
+									<li class="list-group-item">Confirm appropriate IV catheter access</li>
+									<li class="list-group-item">Assess patient pre-infusion</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse3">Perform infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse3" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Verify patient ID and blood product info</li>
+									<li class="list-group-item">Start infusion of blood product</li>
+									<li class="list-group-item">Assess patient at 15 minutes</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse4">Perform post-infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse4" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Assess patient post-infusion</li>
+									<li class="list-group-item">Document infusion info: must include infusion volume</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div id="note-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Process Steps</h4>
+
+					<hr>
+					<textarea class="form-control" rows="10"></textarea>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Template Parent Task -->
+	<div id="template-task" style="display: none">
+		<div align="center" class="task-wrap">
+			<div class="parent-task">
+				<h3 class="parent-task-title"></h3>
+				<p class="parent-task-sub"></p>
+			</div>
+
+			<div class="container child-tasks">
+			</div>
+		</div>
+	</div>
+
+	<!-- Template child task -->
+	<div class="child-task-template" style="display: none">
+		<div class="child-task">
+			<div class="row">
+				<div class="col-lg-8 col-md-8">
+					<h4 class="task-title"></h4>
+				</div>
+				<div class="col-lg-4">
+					<div class="col-lg-2">
+						<img src="img/check.png" alt="" class="check-button">
+					</div>
+					<div class="col-lg-2">
+						<img src="img/x.png" alt="" class="x-button">
+					</div>
+					<div class="col-lg-2 col-lg-offset-2">
+						<img src="img/note.png" class="note-button" alt="">
+					</div>
+					<div class="col-lg-2 col-lg-offset-2">
+						<img src="img/info.png" alt="Info button" class="info-button">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="js/script.js"></script>
+</body>
+</html>
