@@ -1,9 +1,7 @@
-echo Setting Variables
-path=$(pwd)
-relativePath="/jWebSocket-1.0/"
-export JWEBSOCKET_HOME=$path$relativePath
+source setVarriables.sh
 cd jwebsocket
 echo Compiling
 javac *.java
 echo Executing
 java ChecklistServer
+cd ..
