@@ -4,8 +4,8 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="lib" path="juliette-client.jar"/>
 	<classpathentry kind="lib" path="ljtypestubs.jar"/>
-	<classpathentry kind="lib" path="/Users/george/Documents/workspace/SmartChecklist/jWebSocket-1.0/libs/jWebSocketServer-1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/george/Documents/workspace/SmartChecklist/jWebSocket-1.0/libs/jWebSocketServerAPI-1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/george/Documents/workspace/SmartChecklist/jWebSocket-1.0/libs/jWebSocketCommon-1.0.jar"/>
+	<classpathentry kind="lib" path="jWebSocket-1.0/libs/jWebSocketServer-1.0.jar"/>
+	<classpathentry kind="lib" path="jWebSocket-1.0/libs/jWebSocketServerAPI-1.0.jar"/>
+	<classpathentry kind="lib" path="jWebSocket-1.0/libs/jWebSocketCommon-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

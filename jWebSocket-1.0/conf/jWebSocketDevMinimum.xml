@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Document   : jWebSocketDevMinimum.xml
+	Created on : May 20 2015, 00:25 AM
+	Author     : Rolando Santamaria Maso
+	Description: Configuration file for a minimum jWebSocket server initialization.
+-->
+<jWebSocket>
+	<installation>prod</installation>
+	<protocol>json</protocol>
+	<node_id>01</node_id>
+	
+	<libraries>
+		<library>
+			<id>DerbyDriver</id>
+			<url>${JWEBSOCKET_HOME}libs/derby-10.10.1.1.jar</url>
+			<description>Derby JDBC driver to access Derby databases from jWebSocket and its plug-ins</description>
+		</library>
+	</libraries>
+
+	<!-- jWebSocket logging configuration -->
+	<logging>
+		<log4j>
+			<config>${JWEBSOCKET_HOME}conf/log4j.xml</config>
+			<autoreload>20000</autoreload>
+		</log4j>
+	</logging>
+
+	<initializerClass>org.jwebsocket.factory.JWebSocketInitializer</initializerClass>
+
+	<engines>
+		
+		<!-- TCP Engine Configuration -->
+		<engine>
+			<name>org.jwebsocket.tcp.TCPEngine</name>
+			<id>tcp0</id>
+			<jar>jWebSocketTCPEngine-1.0.jar</jar>
+			<port>8787</port>
+			<sslport>9797</sslport>
+			<!-- keystore file with in ${JWEBSOCKET_HOME}conf -->
+			<keystore>${JWEBSOCKET_HOME}conf/jWebSocket.ks</keystore>
+			<!-- password to access keystore file -->
+			<password>jWebSocket</password>
+			<!-- CAUTION! -->
+			<!-- not all browsers automatically accept self-signed certificates -->
+			<!-- please follow instructions on the jWebSocket.org website, how
+			     to trust self-signed certificates for the various browsers or
+				 how to import signed private key/certificate bundles into the keystore -->
+
+			<!-- these domains are accepted by the engine listening on the above mentioned port -->
+			<!-- you optionally can add asterisks as wild cards -->
+			<domains>
+				<domain>*</domain>
+				<!-- limit allowed domains here -->
+				<!--
+				<domain>http*://jwebsocket.org</domain>
+				<domain>http*://jwebsocket.com</domain>
+				<domain>http*://*.jwebsocket.org</domain>
+				<domain>http*://*.jwebsocket.com</domain>
+				<domain>http*://10.10.*</domain>
+				<domain>http*://10.21.*</domain>
+				<domain>http*://192.168.*</domain>
+				<domain>http*://localhost*</domain>
+				-->
+			</domains>
+			<!-- default session timeout 1h, max timeout currently 1 hour -->
+			<timeout>0</timeout>
+			<!--
+				maximum size of the data packet that the engine will read,
+				if the frame size is larger than this the connection will be closed.
+			-->
+			<maxframesize>1048840</maxframesize>
+			
+			<!-- maximun number of connections allowed by this engine -->
+			<maxconnections>10000</maxconnections>
+			
+			<!-- on max connections reached strategy -->
+			<!-- wait, close, reject, redirect --> 
+			<onmaxconnections>reject</onmaxconnections>
+			<settings>
+				<!-- NIO output writer mechanism thread pool size -->
+				<setting key="workers">10</setting>
+				<!-- NIO output writer mechanism writes timeout -->
+				<setting key="writer_timeout">1000</setting>
+				<!-- Set socket TcpNoDelay property value
+				more detalis: http://www.rgagnon.com/javadetails/java-0294.html -->
+				<setting key="tcpNoDelay">false</setting>
+			</settings>		
+		</engine>
+	</engines>
+
+	<!-- server types to be instantiated for jWebSocket -->
+	<servers>
+		<server>
+			<name>org.jwebsocket.server.TokenServer</name>
+			<id>ts0</id>
+			<jar>jWebSocketTokenServer-1.0.jar</jar>
+			<!-- define the thread pool properties. Thread are spawned when Token's spawnThread value is true 
+			 Queue sizes and maximum pool sizes may be traded off for each other: Using large queues and small pools minimizes CPU usage, OS resources, and context-switching overhead, but can lead to artificially low throughput. 
+			 If tasks frequently block (for example if they are I/O bound), a system may be able to schedule time for more threads than you otherwise allow. 
+			 Use of small queues generally requires larger pool sizes, which keeps CPUs busier but may encounter unacceptable scheduling overhead, which also decreases throughput.
+			 -->
+			<threadPool>
+				<!--  number of thread that are "waiting" even if the queue is empty  -->
+				<corePoolSize>10</corePoolSize>
+				<!--  number maximum of thread that can be running at the same time -->
+				<maximumPoolSize>100</maximumPoolSize>
+				<!--  time before the desctruction of "free" threads (seconds) -->
+				<keepAliveTime>60</keepAliveTime>
+				<!--  size of the blocking queue. Connection will be refused if the queue is full and the poolsize is equals to the maximumPoolSize -->
+				<blockingQueueSize>1000</blockingQueueSize>
+			</threadPool>
+			
+			<settings>
+				<setting key="supressed_log_fields">password,secretPassword,accessPassword,newSecretPassword,secretKey,accessKey,newSecretKey</setting>
+				<setting key="supressed_log_fields_value">******</setting>
+			</settings>
+		</server>
+	</servers>
+
+	<!-- jWebSocket global rights -->
+	<rights>
+		<!-- System plug-in rights -->
+		<right>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>broadcast</id>
+			<description>Broadcast message to all other clients.</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>send</id>
+			<description>Send message to a single target client.</description>
+		</right>
+	</rights>
+
+	<!-- jWebSocket roles -->
+	<roles>
+		<role>
+			<id>Administrator</id>
+			<description>Administrators</description>
+			<rights>
+				<!-- list of rights for "Administrator" role (ns + . + id) -->
+				<right>org.jwebsocket.plugins.system.broadcast</right>
+				<right>org.jwebsocket.plugins.system.send</right>
+			</rights>
+		</role>
+		<role>
+			<id>User</id>
+			<description>Registered and authenticated users.</description>
+			<rights>
+				<!-- list of rights for "User" role (ns + . + id) -->
+				<right>org.jwebsocket.plugins.system.broadcast</right>
+				<right>org.jwebsocket.plugins.system.send</right>
+			</rights>
+		</role>
+	</roles>
+
+	<users>
+		<user>
+			<uuid>000-000-002-2011-07-14-11-33-20-493</uuid>
+			<loginname>user</loginname>
+			<firstname>jWebSocket Authenticated User</firstname>
+			<lastname>(User Role)</lastname>
+			<password>user</password>
+			<description>jWebSocket Standard User</description>
+			<status>1</status>
+			<roles>
+				<role>User</role>
+			</roles>
+		</user>
+		<user>
+			<uuid>000-000-003-2011-07-14-11-34-17-189</uuid>
+			<loginname>root</loginname>
+			<firstname>jWebSocket Root User</firstname>
+			<lastname>(Administrator Role)</lastname>
+			<password>root</password>
+			<description>jWebSocket Root User</description>
+			<status>1</status>
+			<roles>
+				<role>User</role>
+				<role>Administrator</role>
+			</roles>
+		</user>
+	</users>
+	<plugins>
+		<!-- the system plug-in, do not remove, mandatory for basic WebsScket communication operations -->
+		<plugin>
+			<name>org.jwebsocket.plugins.system.SystemPlugIn</name>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>jws.system</id>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<!-- plug-in specific settings -->
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_HOME}conf/SystemPlugIn/system.xml</setting>
+				<setting key="broadcastOpenEvent">true</setting>
+				<setting key="broadcastCloseEvent">true</setting>
+				<setting key="broadcastLoginEvent">true</setting>
+				<setting key="broadcastLogoutEvent">true</setting>
+				<setting key="allowAnonymousLogin">true</setting>
+				<setting key="anonymousLoginName">anonymous</setting>
+				<setting key="loginNameCaseInsensitive">true</setting>
+				<setting key="allowAutoAnonymous">true</setting>
+			</settings>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</plugin>
+	</plugins>
+
+	<filters>
+		<filter>
+			<name>org.jwebsocket.filters.system.SystemFilter</name>
+			<id>jws.sampleFilter</id>
+			<ns>org.jwebsocket.filters.system</ns>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</filter>
+	</filters>
+
+</jWebSocket>

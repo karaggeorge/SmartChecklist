@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SMSUsageReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="user" class="java.lang.String"/>
+	<field name="message" class="java.lang.String"/>
+	<field name="length" class="java.lang.Integer"/>
+	<field name="time" class="java.lang.Long"/>
+	<field name="state" class="java.lang.String"/>
+	<field name="to" class="java.lang.String"/>
+	<field name="from" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch">
+			<image>
+				<reportElement x="6" y="5" width="133" height="54"/>
+				<imageExpression><![CDATA[System.getenv("JWEBSOCKET_HOME") + "//conf//ReportingPlugIn//reports//jWebSocket_logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="185" y="47" width="131" height="24"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User SMS Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="26">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="370" y="4" width="171" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="24" width="555" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="101" splitType="Stretch">
+			<textField>
+				<reportElement x="44" y="3" width="124" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{to}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="3" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{from}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="3" width="112" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="26" width="440" height="45"/>
+				<textElement verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{message}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="26" width="58" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Message:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="74" width="40" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Time:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="248" y="74" width="58" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{state}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="204" y="74" width="41" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[State:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="441" y="74" width="57" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{length}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="333" y="74" width="106" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Message Length:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="1" width="25" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[To:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="3" width="39" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[From:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="3" width="39" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="59" y="74" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date((Long)$F{time})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="97" width="555" height="1" forecolor="#CCCCFF"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="498" y="3" width="21" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
