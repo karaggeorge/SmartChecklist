@@ -4,21 +4,44 @@ bindNoteInfoButtons();
 function addParentTask(title, subtitle){
 	var newTask = $($("#template-task").html());
 	newTask.find(".parent-task-title").text(title);
-	newTask.find(".parent-task-sub").text(subtitle);
+	//newTask.find(".parent-task-sub").text(subtitle);
+	newTask.attr('id', title);
 
 	$("#main-task-container").append( newTask );
 }
 
+function decode(encodedTask) {
+	const parts = encodedTask.split('#@#');
+	return {
+		name: parts[0],
+		completed: parts[1] == 3,
+	}
+}
+
+function addTask(encodedTask) {
+	if(!encodedTask) return;
+	const task = decode(encodedTask);
+	addChildTask('Steps', task.name, task.completed, true, true, task);
+}
+
 //Add a child task to the specified parent task
-function addChildTask(parentTaskNumber, name, completeButton, exceptionButton, infoButton, infoText){
+function addChildTask(parentTask, name, completed, exceptionButton, infoButton, infoText){
 	var newTask = $($(".child-task-template").html());
 	newTask.find("h4").text(name);
+	newTask.attr('id', name);
+	if(completed) newTask.addClass('completed');
+	else {
+		newTask.find(".check-button").click(function () {
+			const task = $(this).parents('.child-task');
+			task.addClass('completed');
+			sendMessage("COMPLETE " + name);
+		});
+		if(!exceptionButton) newTask.find(".x-button").hide();
+	}
 
-	if(!completeButton) newTask.find(".check-button").hide();
-	if(!exceptionButton) newTask.find(".x-button").hide();
 	if(!infoButton) newTask.find(".info-button").hide();
 
-	$(".child-tasks:eq(" + parentTaskNumber + ")").append(newTask);
+	$("#" + parentTask).find('.child-tasks').append(newTask);
 
 	bindNoteInfoButtons();
 }
@@ -58,7 +81,8 @@ var connection = new WebSocket('ws://localhost:8787', 'json');
 
 connection.onopen = function () {
   console.log('Connectionned');
-	sendMessage("start");
+	addParentTask('Steps', 'Here are the steps');
+	sendMessage("START");
 };
 connection.onerror = function (error) {
   console.log('WebSocketor ' + error);
@@ -76,11 +100,10 @@ function sendMessage(msg){
 }
 
 function processLine(req) {
-	if(req.startsWith('STEPS ')) {
+	if(req.startsWith('ITEMS ')) {
 		const steps = req.substring(6);
-		addParentTask('Steps', 'Here are the steps');
-		steps.split('|').forEach((step) => {
-			addChildTask(0, step, true, true, true, "");
+		steps.split('|%|').forEach((step) => {
+			addTask(step);
 		});
 	} else {
 		console.log('Unknown request ' + req);
