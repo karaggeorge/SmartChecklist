@@ -11,13 +11,14 @@ public class Listener implements WebSocketServerListener {
 
 	private WebSocketServerEvent event_;
 	private MercutioServer mercutio;
-	private ArrayList<String> ItemList;
+	private ServerControler controler;
 
 	public Listener() {
 		System.out.println("\n\n --------- STARTED ------------- \n\n");
-		ItemList = new ArrayList<String> ();
 
-		mercutio = new MercutioServer(9090, this);
+		mercutio = new MercutioServer(9090);
+		controler = new ServerControler(mercutio);
+		mercutio.setControler(controler);
 
 		Thread t = new Thread(new Runnable() {
 				public void run() {
@@ -64,29 +65,14 @@ public class Listener implements WebSocketServerListener {
 
 	@Override
 	public void processOpened(WebSocketServerEvent event) {
-
 		System.out.println(" ----- Connectioned ----- ");
 	}
 
 	@Override
 	public void processPacket(WebSocketServerEvent event, WebSocketPacket packet) {
-		// TODO Auto-generated method stub
-		System.out.println("----- WebClient sent " + packet.getString());
-		packet.setString(processLine(packet.getString()));
+		//System.out.println("----- WebClient sent " + packet.getString());
+		packet.setString(controler.processLine(packet.getString()));
 		event.sendPacket(packet);
-	}
-
-	private String processLine(String line) {
-		if(line.equals("start")) {
-			return "STEPS " + String.join("|", ItemList);
-		} else {
-			return "Command Unrecognized";
-		}
-	}
-
-	public void addItem(String item) {
-		ItemList.add(item);
-		System.out.println("Added item " + item);
 	}
 
 }

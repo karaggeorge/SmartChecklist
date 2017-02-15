@@ -22,27 +22,17 @@ import laser.juliette.agent.ItemHandler;
 public class NurseItemHandler extends ItemHandlerAdapter
 {
 	private AgendaItem agendaItem_;
-	private MercutioClient mercutio;
+	private ClientControler controler;
 
-	public NurseItemHandler(AgendaItem item, MercutioClient mercutio) {
+	public NurseItemHandler(AgendaItem item, ClientControler controler) {
 		super();
 		// System.out.println("Initiating NurseItem");
 		this.agendaItem_ = item;
-		this.mercutio = mercutio;
+		this.controler = controler;
 	}
 
 	@Override
 	public void posted() {
-		try {
-			// System.out.println("\tStep: " + this.agendaItem_.getStep().getName());
-			this.mercutio.sendStep(this.agendaItem_.getStep().getName());
-			this.agendaItem_.start();
-			this.agendaItem_.complete();
-		} catch (AMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			this.controler.postItem(this.agendaItem_);
 	}
 }

@@ -1,4 +1,3 @@
-source setVarriables.sh
 cd jwebsocket
 echo Compiling
 javac *.java
