@@ -4,7 +4,7 @@ jul stop
 cd ..
 javac laser/bt/agents/*.java
 echo Compiled
-jar cf SimplifiedBloodTransfusionProcess-juld.jar -C . .
+jar cf SimplifiedBloodTransfusionProcess-juld.jar -C . laser/
 mv -f SimplifiedBloodTransfusionProcess-juld.jar juls-and-scripts/SimplifiedBloodTransfusionProcess-juld.jar
 echo Built
 cd juls-and-scripts
