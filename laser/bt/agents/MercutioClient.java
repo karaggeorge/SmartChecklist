@@ -55,6 +55,8 @@ public class MercutioClient {
 		log("Received", line);
 		if(line.startsWith("COMPLETE ")) {
 				controler.completeItem(line.substring(9));
+		} else if(line.startsWith("TERMINATE ")) {
+				controler.terminateItem(line.substring(10));
 		} else if(line.equals("EXIT")) {
 				shutDown();
 		} else if(line.startsWith("ERROR ")) {
@@ -82,7 +84,7 @@ public class MercutioClient {
 	}
 
 	private void log(String title, String message) {
-		System.out.println("---- " + title + " : \"" + message + "\"");
+		System.out.println("---- Client ---- " + title + " : \"" + message + "\"");
 	}
 
 //	public static void main(String[] args) {

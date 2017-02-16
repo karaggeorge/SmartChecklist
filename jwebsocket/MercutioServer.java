@@ -5,12 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.util.List;
+import java.util.Arrays;
 
 public class MercutioServer {
 
 	private String ERROR = "ERROR";
 	private String COMPLETE = "COMPLETE";
+	private String TERMINATE = "TERMINATE";
 
 	private PrintWriter out;
 	private BufferedReader in;
@@ -75,6 +77,10 @@ public class MercutioServer {
 		sendMessage(this.COMPLETE, itemName);
 	}
 
+	public void terminateItem(String terminateCode) {
+		sendMessage(this.TERMINATE, terminateCode);
+	}
+
 	private void sendMessage(String command, String message) {
 		//System.out.println("Sending message " + step);
 		log("Sending", command + " " + message);
@@ -94,7 +100,7 @@ public class MercutioServer {
 	}
 
 	private void log(String title, String message) {
-		System.out.println("---- " + title + " : \"" + message + "\"");
+		System.out.println("---- Server ---- " + title + " : \"" + message + "\"");
 	}
 
 	public static void main(String[] args) {

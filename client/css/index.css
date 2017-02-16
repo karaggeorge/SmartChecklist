@@ -37,19 +37,30 @@
 	border: 1px solid black;
 }
 
-.done {
+.child-tasks {
+	padding-bottom: 15px;
+}
+
+.done,
+.failed {
 	display: none;
 }
 
-.child-task.completed {
+.child-task.completed,
+.child-task.terminated {
 	background-color: #EEE;
 }
 
-.completed .current {
+.completed .current,
+.terminated .current {
 	display: none;
 }
 
 .completed .done {
+	display: block;
+}
+
+.terminated .failed {
 	display: block;
 }
 

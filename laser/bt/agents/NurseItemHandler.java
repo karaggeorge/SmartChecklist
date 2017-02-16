@@ -33,6 +33,7 @@ public class NurseItemHandler extends ItemHandlerAdapter
 
 	@Override
 	public void posted() {
+			System.out.println("Juliette posting item");
 			this.controler.postItem(this.agendaItem_);
 	}
 }

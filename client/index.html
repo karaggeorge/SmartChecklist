@@ -186,6 +186,37 @@
 		</div>
 	</div>
 
+	<!-- Modal -->
+	<div id="exception-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Step Failed</h4>
+					<h5 class="modal-desc"> Indicate what went wrong while performing "<strong id="modal-task"><strong>"</h5>
+
+						<ul class="list-group modal-exception-list">
+						</ul>
+
+					<div class="mt10 pull-right">
+						<button type="button" id='terminate' class="btn btn-success">Ok</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Template modal list item -->
+	<div id="template-exception">
+		<li class="list-group-item exception-item"></li>
+	</div>
+
 	<!-- Template Parent Task -->
 	<div id="template-task" style="display: none">
 		<div align="center" class="task-wrap">
@@ -213,13 +244,19 @@
 							<img src="img/check.png" alt="" class="check-button">
 						</div>
 						<div class="col-lg-2">
-							<img src="img/x.png" alt="" class="x-button">
+							<img src="img/x.png" data-toggle="modal" data-target="#exception-modal" class="x-button">
 						</div>
 					</div>
 
 					<div class="done">
 						<div class="col-lg-offset-2 col-lg-2">
 							<img src="img/checkmark.png" alt="" class="checkmark-button">
+						</div>
+					</div>
+
+					<div class="failed">
+						<div class="col-lg-offset-2 col-lg-2">
+							<img src="img/redX.png" alt="" class="checkmark-button">
 						</div>
 					</div>
 

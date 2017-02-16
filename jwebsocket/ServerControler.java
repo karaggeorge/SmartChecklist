@@ -21,7 +21,7 @@ public class ServerControler {
 
     items.add(newItem);
     newItems.add(newItem);
-
+    System.out.println("Added items");
     this.newItemsAvailable = true;
   }
 
@@ -30,7 +30,9 @@ public class ServerControler {
 			return startProcess();
 		} else if(line.startsWith("COMPLETE ")) {
       return completeItem(line.substring(9));
-    } else {
+    } else if(line.startsWith("TERMINATE ")) {
+      return terminateItem(line.substring(10));
+    }else {
 			return sendError("Command not recognized");
 		}
 	}
@@ -45,9 +47,23 @@ public class ServerControler {
     System.out.println("Sending command to complete " + itemName);
     for(Item item : items) {
       if(item.getName().equals(itemName)) {
-        if(!item.completed()) {
+        if(!item.done()) {
           item.complete();
           mercutio.completeItem(itemName);
+        }
+      }
+    }
+    return waitForNewItems();
+  }
+
+  private String terminateItem(String terminateCode) {
+    String itemName = terminateCode.split("#@#")[0];
+    System.out.println("Sending command to terminate " + itemName);
+    for(Item item : items) {
+      if(item.getName().equals(itemName)) {
+        if(!item.done()) {
+          item.terminate();
+          mercutio.terminateItem(terminateCode);
         }
       }
     }
@@ -92,33 +108,4 @@ public class ServerControler {
 	private String sendError(String error) {
 		return this.ERROR + error;
 	}
-
-  /* Item Class Declaration */
-  private class Item {
-
-    private String name;
-    private int status;
-
-    public Item(String itemCode) {
-      this.name = itemCode;
-      this.status = 1;
-    }
-
-    public String getName() {
-      return this.name;
-    }
-
-    public String encode() {
-      return this.name + "#@#" + this.status;
-    }
-
-    public void complete() {
-      this.status = 3;
-    }
-
-    public boolean completed() {
-      return this.status == 3;
-    }
-  }
-
 }
