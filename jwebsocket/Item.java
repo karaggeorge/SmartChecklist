@@ -2,6 +2,8 @@ public class Item {
 
   private String name;
   private int status;
+  private String parent;
+  private String isLeaf;
   private String [] exceptions;
 
   public Item(String itemCode) {
@@ -17,7 +19,9 @@ public class Item {
     String [] parts = itemCode.split("#@#");
     this.name = parts[0];
     this.status = 1;
-    if(parts.length > 1) this.exceptions = parts[1].split("\\|\\|ss");
+    this.isLeaf = parts[1];
+    this.parent = parts[2];
+    if(parts.length > 3) this.exceptions = parts[3].split("\\|\\|ss");
     System.out.println("My exceptions are " + getExceptions());
   }
 
@@ -27,7 +31,7 @@ public class Item {
   }
 
   public String encode() {
-    return this.name + "#@#" + this.status + "#@#" + getExceptions();
+    return this.name + "#@#" + this.status + "#@#" + this.isLeaf + "#@#" + this.parent + "#@#" + getExceptions();
   }
 
   public void complete() {

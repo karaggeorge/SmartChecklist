@@ -19,10 +19,19 @@ public class ServerControler {
   public void postItem(String itemCode) {
     Item newItem = new Item(itemCode);
 
+    if(itemExists(newItem)) return;
+
     items.add(newItem);
     newItems.add(newItem);
     System.out.println("Added items");
     this.newItemsAvailable = true;
+  }
+
+  private boolean itemExists(Item newItem) {
+    for(Item item : items) {
+      if(newItem.getName().equals(item.getName())) return true;
+    }
+    return false;
   }
 
   public String processLine(String line) {
@@ -92,8 +101,9 @@ public class ServerControler {
   }
 
   private String waitForNewItems() {
+    Thread.sleep(500);
     int count = 0;
-    while(!this.newItemsAvailable && count < 7) {
+    while(!this.newItemsAvailable && count < 4) {
       try {
         Thread.sleep(100);
         count++;

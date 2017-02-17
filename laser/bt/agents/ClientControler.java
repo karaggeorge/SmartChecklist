@@ -26,8 +26,14 @@ public class ClientControler {
 
   public void postItem(AgendaItem item) {
     items.add(item);
+
     try {
+      AgendaItem p = item;
       mercutio.postItem(encode(item));
+      while(p.getStep().hasParent()) {
+        mercutio.postItem(encode(p.getParent()));
+        p = p.getParent();
+      }
       item.start();
     } catch (Exception e) {
       e.printStackTrace();
@@ -104,8 +110,12 @@ public class ClientControler {
 
   private String encode(AgendaItem item) throws AMSException {
     Set<String> exceptions = getExceptionDeclarations(item);
+    String parent = "none";
+    int isLeaf = 0;
+    if(item.getStep().hasParent()) parent = item.getParent().getStep().getName();
+    if(item.getStep().isLeaf()) isLeaf = 1;
 
-    return item.getStep().getName() + "#@#" + String.join("||", exceptions);
+    return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions);
   }
 
   public Set<String> getExceptionDeclarations(AgendaItem item) {
