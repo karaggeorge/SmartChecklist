@@ -6,6 +6,12 @@ const map = {};
 var taskNum = 0;
 const tree = [];
 
+const TYPES = {
+	2: "Perform all of these in their specific order",
+	3: "Perform all of these in any order",
+	4: "Perform one of these",
+};
+
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
@@ -19,6 +25,9 @@ function addParentTask(parentTaskId, task){
 	const newTask = $($("#template-task").html());
 	newTask.find(".parent-task-title").text(task.name);
 	//newTask.find(".parent-task-sub").text(subtitle);
+	if(TYPES[task.type]) {
+		newTask.find(".parent-task-sub").text(TYPES[task.type]);
+	}
 	newTask.attr('id', task.id);
 	$("#" + parentTaskId).find('.child-tasks').first().append( newTask );
 	tree[task.pos].displayed = true;
@@ -151,6 +160,7 @@ function decode(encodedTask) {
 		completed: parts[1] == 3,
 		terminated: parts[1] == 4,
 		isLeaf: parts[2] == 1,
+		type: parts[2],
 		parent: parts[3],
 		exceptions: parts[4] ? parts[4].split('||') : null,
 		displayed: false,

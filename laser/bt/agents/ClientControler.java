@@ -114,6 +114,9 @@ public class ClientControler {
     int isLeaf = 0;
     if(item.getStep().hasParent()) parent = item.getParent().getStep().getName();
     if(item.getStep().isLeaf()) isLeaf = 1;
+    else if(item.getStep().isSequential()) isLeaf = 2;
+    else if(item.getStep().isParallel()) isLeaf = 3;
+    else if(item.getStep().isChoice()) isLeaf = 4;
 
     return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions);
   }

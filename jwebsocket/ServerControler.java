@@ -101,7 +101,12 @@ public class ServerControler {
   }
 
   private String waitForNewItems() {
-    Thread.sleep(500);
+    try {
+      Thread.sleep(500);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
     int count = 0;
     while(!this.newItemsAvailable && count < 4) {
       try {
