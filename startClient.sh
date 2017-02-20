@@ -1,1 +1,1 @@
-open client/agent.html
+open client/index.html
