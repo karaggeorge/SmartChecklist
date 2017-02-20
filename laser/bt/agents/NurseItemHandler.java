@@ -4,14 +4,6 @@
  */
 package laser.bt.agents;
 
-import java.io.Serializable;
-import java.util.LinkedHashSet;
-import java.util.Random;
-import java.util.Set;
-
-import laser.bt.exceptions.FailedProductCheck;
-import laser.bt.exceptions.PatientBloodTypeUnavailable;
-import laser.bt.exceptions.WrongPatient;
 import laser.juliette.agent.ItemHandlerAdapter;
 import laser.juliette.ams.AMSException;
 import laser.juliette.ams.AgendaItem;
