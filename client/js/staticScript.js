@@ -12,6 +12,8 @@ const TYPES = {
 	4: "Perform one of these",
 };
 
+var taskComments = {};
+
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
@@ -164,6 +166,7 @@ function decode(encodedTask) {
 		parent: parts[3],
 		exceptions: parts[4] ? parts[4].split('||') : null,
 		displayed: false,
+		description: parts[5]
 	}
 }
 
@@ -213,6 +216,7 @@ function bindNoteInfoButtons(){
 	});
 
 	$(".note-button").click(function(){
+		console.log($(this).parent().parent().parent().parent().attr("id"));
 		$("#note-modal").modal("show");
 	});
 }
@@ -292,5 +296,5 @@ $('#exception-modal #terminate').on('click', function() {
 	}
 })
 
-const staticSteps = "confirm existence of blood type and screen#@#3#@#1#@#obtain patient's blood type#@#patient blood type unavailable|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
-manageNewTasks(steps.split('|%|'));
+const staticSteps = "confirm existence of blood type and screen#@#3#@#1#@#obtain patient's blood type#@#patient blood type unavailable#@#description|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
+manageNewTasks(staticSteps.split('|%|'));

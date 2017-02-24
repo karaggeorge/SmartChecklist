@@ -12,6 +12,8 @@ const TYPES = {
 	4: "Perform one of these",
 };
 
+var descriptions = [];
+
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
