@@ -18,6 +18,7 @@ public class ClientControler {
   private ArrayList<AgendaItem> items;
   private MercutioClient mercutio;
   private static List<String> installedExceptionDecls;
+  private Object descriptions;
 
   public ClientControler(MercutioClient mercutio) {
     this.mercutio = mercutio;
@@ -25,6 +26,7 @@ public class ClientControler {
   }
 
   public void postItem(AgendaItem item) {
+    findParentItem(item);
     items.add(item);
 
     try {
@@ -35,6 +37,33 @@ public class ClientControler {
         p = p.getParent();
       }
       item.start();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void findParentItem(AgendaItem item) {
+    if(this.descriptions != null) return;
+
+    try {
+      AgendaItem p = item;
+      while(p.getStep().hasParent()) {
+        p = p.getParent();
+      }
+      
+      InterfaceDeclarationSet declSet = p.getStep().getDeclarations(DeclarationKind.LOCAL_PARAMETER);
+			if ((declSet != null) && (! declSet.isEmpty())) {
+				for (InterfaceDeclaration decl : declSet) {
+					String name = decl.getName();
+          System.out.println("GOT DECLARATION " + name);
+          if(name.equals("taskDescriptions")) {
+            Class c = Class.forName(decl.getTemplate().getObjectType());
+            this.descriptions = c.newInstance();
+            System.out.println("Got the declaration class and it says " + this.descriptions.toString());
+          }
+        }
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -110,6 +139,7 @@ public class ClientControler {
 
   private String encode(AgendaItem item) throws AMSException {
     Set<String> exceptions = getExceptionDeclarations(item);
+    Set<String> artifacts = getArtifacts(item);
     String parent = "none";
     int isLeaf = 0;
     if(item.getStep().hasParent()) parent = item.getParent().getStep().getName();
@@ -118,8 +148,51 @@ public class ClientControler {
     else if(item.getStep().isParallel()) isLeaf = 3;
     else if(item.getStep().isChoice()) isLeaf = 4;
 
-    return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions);
+    return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions) + "#@#" + String.join("||", artifacts);
   }
+
+  public Set<String> getArtifacts(AgendaItem item) {
+      Set<String> parameterDecls = new LinkedHashSet<String> ();
+
+      try {
+        InterfaceDeclarationSet parameterDeclSet = item.getStep().getParameters();
+        if ((parameterDeclSet != null) && (! parameterDeclSet.isEmpty())) {
+          for (InterfaceDeclaration parameterDecl : parameterDeclSet) {
+            String mode = toParameterMode(parameterDecl);
+            if (mode == null) {
+              continue;
+            }
+            // Class c = Class.forName(parameterDecl.getTemplate().getObjectType());
+            // System.out.println("I got " + c.newInstance().toString() + "!!!!! <-------");
+            parameterDecls.add(parameterDecl.getName() + "#%#" + mode + "#%#" + parameterDecl.getTemplate().getObjectType());
+          }
+        }
+      } catch (AMSException e1) {
+  			// TODO Auto-generated catch block
+  			e1.printStackTrace();
+  		} catch (Exception e) {
+        e.printStackTrace();
+      }
+
+      return parameterDecls;
+  }
+
+  protected String toParameterMode(InterfaceDeclaration outputParameterDecl) {
+		DeclarationKind ljKind = outputParameterDecl.getDeclarationKind();
+		String mode = null;
+
+		if (ljKind == DeclarationKind.IN_PARAMETER) {
+			mode = "IN";
+		}
+		// else if (ljKind == DeclarationKind.IN_OUT_PARAMETER) {
+		// 	mode = ParameterMode.INOUT;
+		// }
+		else if (ljKind == DeclarationKind.OUT_PARAMETER) {
+			mode = "OUT";
+		}
+
+		return mode;
+	}
 
   public Set<String> getExceptionDeclarations(AgendaItem item) {
 		Set<String> exceptionDecls = new LinkedHashSet<String>();
