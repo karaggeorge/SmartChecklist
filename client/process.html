@@ -163,7 +163,7 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
+	<!-- Notes Modal -->
 	<div id="note-modal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 
@@ -171,13 +171,16 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Process Steps</h4>
+					<h4 class="modal-title">Add Comments</h4>
 
 					<hr>
-					<textarea class="form-control" rows="10"></textarea>
+
+					<div id="old-comments"></div>
+
+					<textarea class="form-control" rows="10" id="note-input"></textarea>
 
 					<div class="mt10 pull-right">
-						<button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="save-note">Save</button>
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 					</div>
 				</div>
@@ -188,7 +191,32 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
+	<!-- Description Modal -->
+	<div id="description-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Task Description</h4>
+
+					<hr>
+					
+					<p id="description-text"></p>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Exception Modal -->
 	<div id="exception-modal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 

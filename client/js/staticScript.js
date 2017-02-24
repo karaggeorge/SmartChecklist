@@ -12,8 +12,6 @@ const TYPES = {
 	4: "Perform one of these",
 };
 
-var taskComments = {};
-
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
@@ -166,7 +164,8 @@ function decode(encodedTask) {
 		parent: parts[3],
 		exceptions: parts[4] ? parts[4].split('||') : null,
 		displayed: false,
-		description: parts[5]
+		description: parts[5],
+		comments: []
 	}
 }
 
@@ -215,8 +214,46 @@ function bindNoteInfoButtons(){
 		$("#process-info-modal").modal("show");
 	});
 
+	$(".info-button").click(function(){
+		var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+		// Find the task in the tree
+		$.each(tree, function(i, task){
+			if(taskID == task.id){
+				$("#description-modal .modal-title").text(task.name);
+				if(task.description){
+					$("#description-text").text(task.description);
+				}
+				else{
+					$("#description-text").text("No description found");
+				}
+			}
+		});
+
+		$("#description-modal").modal("show");
+	});
+
 	$(".note-button").click(function(){
-		console.log($(this).parent().parent().parent().parent().attr("id"));
+		var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+		$("#note-modal").attr("data-task", taskID);
+
+		// Find the task in the tree
+		$.each(tree, function(i, task){
+			if(taskID == task.id){
+				if(task.comments){
+					var list = $("<ul></ul>");
+
+					$.each(task.comments, function(j, comment){
+						list.append("<li>" + comment + "</li>");
+					});
+
+					$("#old-comments").html(list);
+					$("#note-input").val("");
+				}
+			}
+		});
+
 		$("#note-modal").modal("show");
 	});
 }
@@ -240,7 +277,6 @@ function simulateVitals(){
 
 	}, 1000);
 }
-
 
 //Modals
 
@@ -294,7 +330,22 @@ $('#exception-modal #terminate').on('click', function() {
 		taskElement.addClass('terminated');
 		modal.modal('hide');
 	}
-})
+});
+
+$("#save-note").on("click", function(){
+	// Get the id of the task adding note to
+	var taskID = $("#note-modal").attr('data-task');
+	var note = $("#note-input").val();
+
+	// Find the task in the tree
+	$.each(tree, function(i, task){
+		if(taskID == task.id){
+			task.comments.push(note);
+		}
+	});
+
+	$("#note-input").val("");
+});
 
 const staticSteps = "confirm existence of blood type and screen#@#3#@#1#@#obtain patient's blood type#@#patient blood type unavailable#@#description|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
 manageNewTasks(staticSteps.split('|%|'));
