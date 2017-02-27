@@ -165,7 +165,8 @@ function decode(encodedTask) {
 		exceptions: parts[4] ? parts[4].split('||') : null,
 		displayed: false,
 		description: parts[5],
-		comments: []
+		comments: [],
+		date: null
 	}
 }
 
@@ -191,6 +192,10 @@ function addLeafTask(parentTaskId, task){
 
 		newTask.find(".check-button").click(function () {
 			$(this).parents('.child-task').addClass('completed');
+			$(this).parent().parent().parent().parent().find(".time").html(getDateTime());
+
+			tree[task.pos].date = getDateTime();
+
 			sendMessage("COMPLETE " + task.name);
 		});
 
@@ -208,11 +213,18 @@ function addLeafTask(parentTaskId, task){
 	bindNoteInfoButtons();
 }
 
+function getDateTime(){
+	var today = new Date();
+	var date = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+	var time = today.getHours() + ":" + today.getMinutes();
+	return date + " " + time;
+}
+
 // Bind the note and info buttons to open the model when clicked
 function bindNoteInfoButtons(){
-	$("#process-info-button").click(function(){
-		$("#process-info-modal").modal("show");
-	});
+	// $("#process-info-button").click(function(){
+	// 	$("#process-info-modal").modal("show");
+	// });
 
 	$(".info-button").click(function(){
 		var taskID = $(this).parent().parent().parent().parent().attr("id");
@@ -278,6 +290,32 @@ function simulateVitals(){
 	}, 1000);
 }
 
+function generatePostDoc(){
+	// var doc = new jsPDF('p', 'mm');
+	// html2canvas($("body"), {background: "white"}).then(function(canvas) {
+	// 	// only jpeg is supported by jsPDF
+	// 	var imgData = canvas.toDataURL("image/jpeg", 0.6);
+	// 	doc.addImage(imgData, 'PNG', 0, 0);
+	// 	doc.save("download.pdf");
+	// });
+
+	var table = $("<table class='table'></table>");
+	var row = $("<tr></tr>");
+	var cell = $("<td></td>");
+
+	$.each(tree, function(i, task){
+		
+		var newRow = row;
+
+
+
+	});
+
+
+	var myWindow = window.open("", "Post Documentation", "width=600,height=600");
+	myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+}
+
 //Modals
 
 //Exceptions Modal
@@ -340,12 +378,12 @@ $("#save-note").on("click", function(){
 	// Find the task in the tree
 	$.each(tree, function(i, task){
 		if(taskID == task.id){
-			task.comments.push(note);
+			task.comments.push(note + "		<b>(" + getDateTime() + ")</b>");
 		}
 	});
 
 	$("#note-input").val("");
 });
 
-const staticSteps = "confirm existence of blood type and screen#@#3#@#1#@#obtain patient's blood type#@#patient blood type unavailable#@#description|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
+const staticSteps = "confirm existence of blood type and screen#@#1#@#1#@#obtain patient's blood type#@#patient blood type unavailable#@#Ensure the blood type is known|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
 manageNewTasks(staticSteps.split('|%|'));

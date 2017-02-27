@@ -264,16 +264,18 @@
 	<div class="child-task-template" style="display: none">
 		<div class="child-task">
 			<div class="row">
-				<div class="col-lg-8 col-md-8">
+				<div class="col-lg-6 col-md-6">
 					<h4 class="task-title"></h4>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-6">
 
+					<div class="time col-lg-3" style="font-size: 12px;line-height: 1.5;"></div>
+					
 					<div class="current">
-						<div class="col-lg-2">
+						<div class="col-lg-1">
 							<img src="img/check.png" alt="" class="check-button">
 						</div>
-						<div class="col-lg-2">
+						<div class="col-lg-1">
 							<img src="img/x.png" data-toggle="modal" data-target="#exception-modal" class="x-button">
 						</div>
 					</div>
@@ -290,10 +292,10 @@
 						</div>
 					</div>
 
-					<div class="col-lg-2 col-lg-offset-2">
+					<div class="col-lg-2 ">
 						<img src="img/note.png" class="note-button" alt="">
 					</div>
-					<div class="col-lg-2 col-lg-offset-2">
+					<div class="col-lg-2 ">
 						<img src="img/info.png" alt="Info button" class="info-button">
 					</div>
 				</div>
@@ -303,6 +305,10 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
+	<script src="js/html2canvas.js"></script>
+
 	<script src="js/staticScript.js"></script>
 </body>
 </html>
