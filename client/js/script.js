@@ -12,8 +12,6 @@ const TYPES = {
 	4: "Perform one of these",
 };
 
-var descriptions = [];
-
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
@@ -152,6 +150,22 @@ function buildTree(tasks, index) {
 	}
 }
 
+function decodeArtifacts(encodedArtifacts) {
+	const parts = encodedArtifacts.split("||");
+	const artifacts = [];
+	parts.forEach(function(part) {
+		const newParts = part.split("#%#");
+		newArtifact = {
+			name: newParts[0],
+			type: newParts[1],
+			class: newParts[2],
+		};
+		artifacts.push(newArtifact);
+	});
+
+	return artifacts;
+}
+
 function decode(encodedTask) {
 	const parts = encodedTask.split('#@#');
 	taskIds[parts[0]] = "task-id-" + taskNum;
@@ -166,6 +180,10 @@ function decode(encodedTask) {
 		parent: parts[3],
 		exceptions: parts[4] ? parts[4].split('||') : null,
 		displayed: false,
+		description: parts[5] != " " ? parts[5] : null,
+		artifacts: parts[6] != " " ? decodeArtifacts(parts[6]) : [],
+		comments: [],
+		date: null
 	}
 }
 
@@ -182,6 +200,13 @@ function addLeafTask(parentTaskId, task){
 	newTask.find("h4").text(task.name);
 	newTask.attr('id', task.id);
 
+	newTask.find('[data-toggle="popover"]').popover();
+	var artifactString = "";
+	task.artifacts.forEach(function(artifact) {
+		artifactString += artifact.name + ", ";
+	});
+	newTask.find('[data-toggle="popover"]').attr("data-content",artifactString);
+
 	if(task.completed) {
 		newTask.addClass('completed');
 	}
@@ -191,6 +216,10 @@ function addLeafTask(parentTaskId, task){
 
 		newTask.find(".check-button").click(function () {
 			$(this).parents('.child-task').addClass('completed');
+			$(this).parent().parent().parent().parent().find(".time").html(getDateTime());
+
+			tree[task.pos].date = getDateTime();
+
 			sendMessage("COMPLETE " + task.name);
 		});
 
@@ -208,13 +237,59 @@ function addLeafTask(parentTaskId, task){
 	bindNoteInfoButtons();
 }
 
+function getDateTime(){
+	var today = new Date();
+	var date = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+	var time = today.getHours() + ":" + today.getMinutes();
+	return date + " " + time;
+}
+
 // Bind the note and info buttons to open the model when clicked
 function bindNoteInfoButtons(){
-	$("#process-info-button").click(function(){
-		$("#process-info-modal").modal("show");
+	// $("#process-info-button").click(function(){
+	// 	$("#process-info-modal").modal("show");
+	// });
+
+	$(".info-button").click(function(){
+		var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+		// Find the task in the tree
+		$.each(tree, function(i, task){
+			if(taskID == task.id){
+				$("#description-modal .modal-title").text(task.name);
+				if(task.description){
+					$("#description-text").text(task.description);
+				}
+				else{
+					$("#description-text").text("No description found");
+				}
+			}
+		});
+
+		$("#description-modal").modal("show");
 	});
 
 	$(".note-button").click(function(){
+		var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+		$("#note-modal").attr("data-task", taskID);
+
+		// Find the task in the tree
+		$.each(tree, function(i, task){
+			if(taskID == task.id){
+				if(task.comments){
+					var list = $("<ul></ul>");
+
+					$.each(task.comments, function(j, comment){
+						list.append("<li>" + comment + "</li>");
+					});
+
+					$("#old-comments").html(list);
+					$("#note-input").val("");
+				}
+			}
+		});
+
 		$("#note-modal").modal("show");
 	});
 }
@@ -239,6 +314,31 @@ function simulateVitals(){
 	}, 1000);
 }
 
+function generatePostDoc(){
+	// var doc = new jsPDF('p', 'mm');
+	// html2canvas($("body"), {background: "white"}).then(function(canvas) {
+	// 	// only jpeg is supported by jsPDF
+	// 	var imgData = canvas.toDataURL("image/jpeg", 0.6);
+	// 	doc.addImage(imgData, 'PNG', 0, 0);
+	// 	doc.save("download.pdf");
+	// });
+
+	var table = $("<table class='table'></table>");
+	var row = $("<tr></tr>");
+	var cell = $("<td></td>");
+
+	$.each(tree, function(i, task){
+
+		var newRow = row;
+
+
+
+	});
+
+
+	var myWindow = window.open("", "Post Documentation", "width=600,height=600");
+	myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+}
 
 //Modals
 
@@ -292,7 +392,22 @@ $('#exception-modal #terminate').on('click', function() {
 		taskElement.addClass('terminated');
 		modal.modal('hide');
 	}
-})
+});
+
+$("#save-note").on("click", function(){
+	// Get the id of the task adding note to
+	var taskID = $("#note-modal").attr('data-task');
+	var note = $("#note-input").val();
+
+	// Find the task in the tree
+	$.each(tree, function(i, task){
+		if(taskID == task.id){
+			task.comments.push(note + "		<b>(" + getDateTime() + ")</b>");
+		}
+	});
+
+	$("#note-input").val("");
+});
 
 
 var connection = new WebSocket('ws://localhost:8787', 'json');

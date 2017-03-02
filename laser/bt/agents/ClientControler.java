@@ -154,15 +154,15 @@ public class ClientControler {
   }
 
   private String getTaskDescription(AgendaItem item) {
-    return " ";
-    // String result = "";
-    // try {
-    //   Method method = this.descriptions.getClass().getMethod("getTaskDescription", String.class);
-    //   result = (String) method.invoke(this.descriptions, item.getStep().getName());
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // }
-    // return result;
+    String result = " ";
+    try {
+      Method method = this.descriptions.getClass().getMethod("getTaskDescription", String.class);
+      result = (String) method.invoke(this.descriptions, item.getStep().getName());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if(result == null) result = " ";
+    return result;
   }
 
   public Set<String> getArtifacts(AgendaItem item) {
