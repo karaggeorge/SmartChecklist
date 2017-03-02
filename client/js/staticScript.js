@@ -44,6 +44,8 @@ function manageNewTasks(tasks) {
 	});
 	addToTree(decodedTasks);
 	displayTasks();
+
+	bindNoteInfoButtons();
 }
 
 function displayTasks() {
@@ -210,7 +212,6 @@ function addLeafTask(parentTaskId, task){
 
 	$("#" + parentTaskId).find('.child-tasks').first().append(newTask);
 	tree[task.pos].displayed = true;
-	bindNoteInfoButtons();
 }
 
 function getDateTime(){
@@ -267,6 +268,14 @@ function bindNoteInfoButtons(){
 		});
 
 		$("#note-modal").modal("show");
+	});
+
+	$(".artifacts").click(function(){
+
+		var taskName = $(this).parent().parent().find(".task-title").text();
+
+		//Show the artifact modal
+		$("#artifact-modal").modal("show");
 	});
 }
 
@@ -370,6 +379,8 @@ $('#exception-modal #terminate').on('click', function() {
 	}
 });
 
+
+// Notes
 $("#save-note").on("click", function(){
 	// Get the id of the task adding note to
 	var taskID = $("#note-modal").attr('data-task');
