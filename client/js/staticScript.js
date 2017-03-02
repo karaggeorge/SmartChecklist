@@ -194,9 +194,11 @@ function addLeafTask(parentTaskId, task){
 
 		newTask.find(".check-button").click(function () {
 			$(this).parents('.child-task').addClass('completed');
-			$(this).parent().parent().parent().parent().find(".time").html(getDateTime());
 
-			tree[task.pos].date = getDateTime();
+			var dateTime = getDateTime();
+			$(this).parent().parent().parent().parent().find(".time").html(dateTime.date + " " + dateTime.time);
+
+			tree[task.pos].date = dateTime;
 
 			sendMessage("COMPLETE " + task.name);
 		});
@@ -215,10 +217,11 @@ function addLeafTask(parentTaskId, task){
 }
 
 function getDateTime(){
+	var dateObj = {};
 	var today = new Date();
-	var date = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
-	var time = today.getHours() + ":" + today.getMinutes();
-	return date + " " + time;
+	dateObj["date"] = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+	dateObj["time"] = today.getHours() + ":" + today.getMinutes();
+	return dateObj;
 }
 
 // Bind the note and info buttons to open the model when clicked
@@ -300,29 +303,53 @@ function simulateVitals(){
 }
 
 function generatePostDoc(){
-	// var doc = new jsPDF('p', 'mm');
-	// html2canvas($("body"), {background: "white"}).then(function(canvas) {
-	// 	// only jpeg is supported by jsPDF
-	// 	var imgData = canvas.toDataURL("image/jpeg", 0.6);
-	// 	doc.addImage(imgData, 'PNG', 0, 0);
-	// 	doc.save("download.pdf");
-	// });
+	var table = $("#post-documentation-table");
+	var tableBody = $("#post-documentation-table tbody");
 
-	var table = $("<table class='table'></table>");
-	var row = $("<tr></tr>");
-	var cell = $("<td></td>");
+	table.show();
+	tableBody.html("");
 
-	$.each(tree, function(i, task){
-		
-		var newRow = row;
+	for(var i = 0; i < tree.length; i++){
+		var task = tree[i];
+		var comments = "";
+
+		for(var j = 0; j < task.comments.length; j++){
+			comments = comments + task.comments[j] + "<br/>";
+		}
+
+		if(task.date === null) task.date = getDateTime();
+
+		var html = "<tr>";
+
+		html = html + "<td>" + task.name + "</td>";
+		html = html + "<td>" + task.date.date + "</td>";
+		html = html + "<td>" + task.date.time + "</td>";
+		html = html + "<td>98</td>";
+		html = html + "<td>27.5</td>";
+		html = html + "<td>98%</td>";
+		html = html + "<td>120/90</td>";
+		html = html + "<td>160</td>";
+		html = html + "<td>None</td>";
+		html = html + "<td>" + task.completed + "</td>";
+		html = html + "<td>Lamoureux, Erin</td>";
+		html = html + "<td>" + comments + "</td>";
+
+		html = html + "</tr>";
+
+		tableBody.append(html);
+	}
 
 
+	var doc = new jsPDF('l', 'mm');
 
+	html2canvas($("#post-documentation-table"), {background: "white"}).then(function(canvas) {
+		// only jpeg is supported by jsPDF
+		var imgData = canvas.toDataURL("image/jpeg", 0.6);
+		doc.addImage(imgData, 'PNG', 0, 0);
+		doc.save("post-doc.pdf");
+
+		table.hide();
 	});
-
-
-	var myWindow = window.open("", "Post Documentation", "width=600,height=600");
-	myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
 }
 
 //Modals
@@ -389,7 +416,8 @@ $("#save-note").on("click", function(){
 	// Find the task in the tree
 	$.each(tree, function(i, task){
 		if(taskID == task.id){
-			task.comments.push(note + "		<b>(" + getDateTime() + ")</b>");
+			var dateTime = getDateTime();
+			task.comments.push(note + "		<b>(" + dateTime.date + " " + dateTime.time + ")</b>");
 		}
 	});
 

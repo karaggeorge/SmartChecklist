@@ -16,8 +16,7 @@
 				<h4 class="text-center">Smart Checklist</h4>
 			</div>
 			<div class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 pull-right ">
-				<a href="agent.html">Logout
-					<span class="glyphicon glyphicon-log-out"></span>
+					<button onclick="generatePostDoc()" class="btn btn-primary">Post Documentation</button>
 				</a>
 			</div>
 		</div>
@@ -242,7 +241,7 @@
 		</div>
 	</div>
 
-		<!-- Exception Modal -->
+	<!-- Exception Modal -->
 	<div id="artifact-modal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 
@@ -307,10 +306,6 @@
 						</div>
 					</div>
 
-					<div class="col-lg-2 artifacts" style="cursor: pointer;">
-						<img src="img/suitcase.ico" alt="" style="width: 40px; height: auto">
-					</div>
-
 					<div class="col-lg-2" style="display: none">
 						<div class="col-lg-offset-2 col-lg-6 done">
 							<img src="img/checkmark.png" alt="" class="checkmark-button">
@@ -336,12 +331,42 @@
 	</div>
 </div>
 
+
+
+<div class="container" id="post-documentation-table" style="display:none;width: 1000px">
+	<h1>Transfuse One Unit of Packed Red Blood Cells (PRBCs)</h1>
+	<p>Last Updated: <span class="updated">Fri Jun 24 17:25:39 EDT 2016</span>; Created: <span class="created">Fri Jun 24 17:25:03 EDT 2016</span></p>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th colspan="5">Patient Name: Margaret Geary</th>
+				<th colspan="7">MRN#: 51667154</th>
+			</tr>
+			<tr>
+				<th>Step</th>
+				<th>Date</th>
+				<th>Time</th>
+				<th>HR</th>
+				<th>Temp C</th>
+				<th>SpO2 %</th>
+				<th>BP</th>
+				<th>Pulse Pressure</th>
+				<th>Lung Sounds</th>
+				<th>Problems</th>
+				<th>Clinician</th>
+				<th>Comments</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
 <script src="js/html2canvas.js"></script>
+<script src="js/staticScript.js"></script>
 
-	<script src="js/script.js"></script>
 </body>
 </html>
