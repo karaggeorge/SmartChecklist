@@ -4,7 +4,9 @@ public class Item {
   private int status;
   private String parent;
   private String isLeaf;
-  private String [] exceptions;
+  private String exceptions;
+  private String description;
+  private String artifacts;
 
   public Item(String itemCode) {
     decode(itemCode);
@@ -21,17 +23,20 @@ public class Item {
     this.status = 1;
     this.isLeaf = parts[1];
     this.parent = parts[2];
-    if(parts.length > 3) this.exceptions = parts[3].split("\\|\\|ss");
+    this.exceptions = parts[3];//.split("\\|\\|");
+    this.description = parts[4];
+    this.artifacts = parts[5];//.split("\\|\\|");
     System.out.println("My exceptions are " + getExceptions());
   }
 
   public String getExceptions() {
-    if(this.exceptions != null) return String.join("||", this.exceptions);
-    else return "";
+    //if(this.exceptions != null) return String.join("||", this.exceptions);
+    //else return "";
+    return this.exceptions;
   }
 
   public String encode() {
-    return this.name + "#@#" + this.status + "#@#" + this.isLeaf + "#@#" + this.parent + "#@#" + getExceptions();
+    return this.name + "#@#" + this.status + "#@#" + this.isLeaf + "#@#" + this.parent + "#@#" + getExceptions() + "#@#" + this.description + "#@#" + this.artifacts;
   }
 
   public void complete() {

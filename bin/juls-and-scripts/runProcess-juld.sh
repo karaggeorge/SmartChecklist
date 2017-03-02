@@ -3,6 +3,8 @@ export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home
 jul stop
 cd ..
 javac laser/bt/agents/*.java
+javac laser/bt/exceptions/*.java
+javac laser/bt/artifacts/*.java
 echo Compiled
 jar cf SimplifiedBloodTransfusionProcess-juld.jar -C . laser/
 mv -f SimplifiedBloodTransfusionProcess-juld.jar juls-and-scripts/SimplifiedBloodTransfusionProcess-juld.jar

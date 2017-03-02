@@ -12,6 +12,7 @@ import laser.lj.InterfaceDeclaration;
 import laser.lj.InterfaceDeclaration.DeclarationKind;
 import laser.lj.InterfaceDeclarationSet;
 import java.util.Collections;
+import java.lang.reflect.Method;
 
 public class ClientControler {
 
@@ -50,7 +51,7 @@ public class ClientControler {
       while(p.getStep().hasParent()) {
         p = p.getParent();
       }
-      
+
       InterfaceDeclarationSet declSet = p.getStep().getDeclarations(DeclarationKind.LOCAL_PARAMETER);
 			if ((declSet != null) && (! declSet.isEmpty())) {
 				for (InterfaceDeclaration decl : declSet) {
@@ -59,7 +60,6 @@ public class ClientControler {
           if(name.equals("taskDescriptions")) {
             Class c = Class.forName(decl.getTemplate().getObjectType());
             this.descriptions = c.newInstance();
-            System.out.println("Got the declaration class and it says " + this.descriptions.toString());
           }
         }
       }
@@ -140,6 +140,8 @@ public class ClientControler {
   private String encode(AgendaItem item) throws AMSException {
     Set<String> exceptions = getExceptionDeclarations(item);
     Set<String> artifacts = getArtifacts(item);
+    String description = getTaskDescription(item);
+    //String description = this.descriptions.newInstance().getTaskDescription(item.getStep().getName());
     String parent = "none";
     int isLeaf = 0;
     if(item.getStep().hasParent()) parent = item.getParent().getStep().getName();
@@ -148,7 +150,19 @@ public class ClientControler {
     else if(item.getStep().isParallel()) isLeaf = 3;
     else if(item.getStep().isChoice()) isLeaf = 4;
 
-    return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions) + "#@#" + String.join("||", artifacts);
+    return item.getStep().getName() + "#@#" + isLeaf + "#@#" + parent + "#@#" + String.join("||", exceptions) + "#@#" + description + "#@#" + String.join("||", artifacts);
+  }
+
+  private String getTaskDescription(AgendaItem item) {
+    return " ";
+    // String result = "";
+    // try {
+    //   Method method = this.descriptions.getClass().getMethod("getTaskDescription", String.class);
+    //   result = (String) method.invoke(this.descriptions, item.getStep().getName());
+    // } catch (Exception e) {
+    //   e.printStackTrace();
+    // }
+    // return result;
   }
 
   public Set<String> getArtifacts(AgendaItem item) {
@@ -173,7 +187,7 @@ public class ClientControler {
   		} catch (Exception e) {
         e.printStackTrace();
       }
-
+      if(parameterDecls.size() == 0) parameterDecls.add(" ");
       return parameterDecls;
   }
 
