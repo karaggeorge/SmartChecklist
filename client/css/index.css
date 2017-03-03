@@ -102,3 +102,12 @@
 .child-task img{
 	cursor: pointer;
 }
+.label-as-badge {
+    border-radius: 1em;
+}
+.note-badge{
+	font-size: 15px;
+	position: absolute;
+	top:-5px;
+	left: 5px;
+}
