@@ -1,0 +1,37 @@
+grant {
+  // Used by RMI
+    permission java.lang.RuntimePermission "setContextClassLoader";
+  permission java.net.SocketPermission "*", "accept, connect, resolve";
+  
+  // Used by RMI clients
+  permission java.util.PropertyPermission "laser.juliette.server", "read";
+  
+   // Used by NanoHTTPD
+  permission java.util.PropertyPermission "user.timezone", "write";
+  permission java.io.FilePermission "${install.dir}/ext${/}", "read";
+  
+  // Used by TypeCatalogService
+  permission java.io.FilePermission "${install.dir}/ext${/}-", "read";
+  
+  // Used by JulService
+  permission java.util.PropertyPermission "install.dir", "read";
+  permission java.util.PropertyPermission "user.dir", "read";
+  permission java.io.FilePermission "${install.dir}${/}jul${/}-", "read";
+  
+  // Used by ProcessStarterFactory
+  permission java.lang.RuntimePermission "createClassLoader";
+
+  // Used by XML parser
+  permission java.util.PropertyPermission "entityExpansionLimit", "read";
+  permission java.util.PropertyPermission "maxOccurLimit", "read";
+  permission java.util.PropertyPermission "elementAttributeLimit", "read";
+  
+  // Used by BSH
+  permission java.util.PropertyPermission "debug", "read";
+  permission java.util.PropertyPermission "trace", "read";
+  permission java.util.PropertyPermission "localscoping", "read";
+  permission java.util.PropertyPermission "outfile", "read";
+  
+  // Used for interpreter debug flags (to be removed?)
+  permission java.util.PropertyPermission "laser.juliette.*", "read";
+ };

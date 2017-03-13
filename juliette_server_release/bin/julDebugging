@@ -1,0 +1,128 @@
+#!/bin/bash
+
+JULIETTE_HOSTNAME=`hostname`
+
+# Get the canonical path to home directory
+ 
+BINDIR="`dirname $0`"
+if [ "${BINDIR:0:1}" != "/" ]; then
+  BINDIR="${PWD}/${BINDIR}"
+fi
+
+cd "${BINDIR}/.."
+INSTALLDIR="${PWD}"
+cd - > /dev/null
+
+# Find the various directories
+BINDIR="${INSTALLDIR}/bin"
+LIBDIR="${INSTALLDIR}/lib"
+JULDIR="${INSTALLDIR}/jul"
+ETCDIR="${INSTALLDIR}/etc"
+
+# Identify cygwin
+if [ "${OS}" == "Windows_NT" ]; then
+  CYGWIN=true;
+fi
+
+# URLs
+CODEBASE_URL=http://${JULIETTE_HOSTNAME}:50105/
+
+
+# Other files
+PIDFILE="${ETCDIR}/jul.pid"
+
+# Java properties
+
+SERVER_HOST_PROPERTY=-Dlaser.juliette.server=${JULIETTE_HOSTNAME}
+RMI_CODEBASE_PROPERTY=-Djava.rmi.server.codebase=${CODEBASE_URL}
+
+if [ -z ${CYGWIN} ]; then
+  SERVER_SECURITY_PROPERTY="-Djava.security.manager -Djava.security.policy=${ETCDIR}/juliette.pol"
+  AGENT_SECURITY_POLICY="-Djava.security.manager -Djava.security.policy=${ETCDIR}/agent.pol"
+  INSTALL_DIR_PROPERTY="-Dinstall.dir=${INSTALLDIR}"
+  SERVER_CLASSPATH="-cp ${LIBDIR}/juliette-server.jar"
+  CLIENT_CLASSPATH="-cp ${LIBDIR}/juliette-client.jar"
+else
+  SERVER_SECURITY_PROPERTY="-Djava.security.manager -Djava.security.policy=\"`cygpath -wp "${ETCDIR}/juliette.pol"`\""
+  AGENT_SECURITY_POLICY="-Djava.security.manager -Djava.security.policy=\"`cygpath -wp "${ETCDIR}/agent.pol"`\""
+  INSTALL_DIR_PROPERTY="-Dinstall.dir=\"`cygpath -wp "${INSTALLDIR}"`\""
+  SERVER_CLASSPATH="-cp \"`cygpath -wp "${LIBDIR}/juliette-server.jar"`\""
+  CLIENT_CLASSPATH="-cp \"`cygpath -wp "${LIBDIR}/juliette-client.jar"`\""
+fi
+
+MAX_HEAP_SIZE=-Xmx256M
+
+CMD=$1
+shift
+
+case ${CMD} in
+  start)
+    if [ -r "${PIDFILE}" ]; then
+      echo "jul: daemon already started."
+    else  
+      java -Dlaser.juliette.interpreter.debug.child=3 ${MAX_HEAP_SIZE} ${SERVER_CLASSPATH} ${SERVER_SECURITY_PROPERTY} ${RMI_CODEBASE_PROPERTY} ${INSTALL_DIR_PROPERTY} laser.juliette.driver.Driver &
+      echo $! > "${PIDFILE}"
+    fi
+  ;;
+  stop)
+    if [ -r "${PIDFILE}" ]; then
+      kill `cat "${PIDFILE}"`
+    fi
+    rm -f "${PIDFILE}"
+  ;;
+  install)
+  	if [ -z "$*" ]; then
+  	  echo "Usage: jul install JULFILE*"
+  	else
+      cp $* "${JULDIR}"
+    fi
+  ;;
+  ls)
+    for FN in "${JULDIR}"/*; do
+      basename "${FN}" .jul
+    done
+  ;;
+  run)
+    if [ -z "$*" ]; then
+  	  echo "Usage: jul run INSTALLED_JUL"
+  	else
+  	  # The server needs to know about the clients' resource and artifact models
+  	  if [ -z ${CYGWIN} ]; then
+      	JAR=":${JULDIR}/$*.jul"
+      else
+        JAR=";\"`cygpath -wp "${JULDIR}/$*.jul"`\""
+      fi
+      java ${MAX_HEAP_SIZE} ${SERVER_CLASSPATH}${JAR} ${AGENT_SECURITY_POLICY} laser.juliette.rmiams.starter.StartProcess $*
+    fi
+  ;;
+  ps)
+    java ${MAX_HEAP_SIZE} ${SERVER_CLASSPATH} laser.juliette.rmiams.statusreporter.PrintProcessStatus
+  ;;
+  kill)
+    if [ -z "$*" ]; then
+      echo "Usage: jul kill PID*"
+    else
+      java ${MAX_HEAP_SIZE} ${SERVER_CLASSPATH} laser.juliette.rmiams.aborter.AbortProcess $*
+    fi
+  ;;
+  agent)
+    if [ -z "$*" ]; then
+  	  echo "Usage: jul agent SERVER_HOST {JAR} CLASS_NAME AGENDA_NAME ARG*"
+  	else
+      USER_SPECIFIED_HOST=$1
+      shift
+      ARG="$1"
+      if [ "$ARG" != ${ARG%".jar"} ]; then
+        if [ -z ${CYGWIN} ]; then
+          JAR=":${ARG}"
+        else
+          JAR=";\"`cygpath -wp "${ARG}"`\""
+        fi
+        shift
+      fi
+      java ${AGENT_SECURITY_POLICY} ${MAX_HEAP_SIZE} ${CLIENT_CLASSPATH}${JAR} -Dlaser.juliette.server=${USER_SPECIFIED_HOST} laser.juliette.agent.Launcher $*
+    fi
+  ;;
+  *)
+    echo "Usage: jul [start | stop | install JULFILE* | ls | run INSTALLED_JUL | ps | kill PID* | agent SERVER_HOST {JAR} CLASS_NAME AGENDA_NAME ARG* ]"
+esac

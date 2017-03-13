@@ -1,0 +1,11 @@
+grant {
+  // Used by RMI
+  permission java.net.SocketPermission "*", "accept, connect, resolve";
+  
+  // Used by the launcher
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "setContextClassLoader";
+  
+  // Used by the AMS listener manager
+  permission java.util.PropertyPermission "laser.juliette.server", "read";
+ };
