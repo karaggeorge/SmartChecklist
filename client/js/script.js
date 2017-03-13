@@ -1,4 +1,4 @@
-bindNoteInfoButtons();
+
 
 const taskExceptions = {};
 const taskIds = {};
@@ -44,6 +44,8 @@ function manageNewTasks(tasks) {
 	});
 	addToTree(decodedTasks);
 	displayTasks();
+
+	bindNoteInfoButtons();
 }
 
 function displayTasks() {
@@ -244,11 +246,17 @@ function getDateTime(){
 	return date + " " + time;
 }
 
-// Bind the note and info buttons to open the model when clicked
+//CHANGE_HERE (FUNCTION - I made it return an object to differentiate the data and time)
+function getDateTime(){
+	var dateObj = {};
+	var today = new Date();
+	dateObj["date"] = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
+	dateObj["time"] = today.getHours() + ":" + today.getMinutes();
+	return dateObj;
+}
+
+//CHANGE_HERE (FUNCTION - There is an artifacts listener in this function - do we still need it?)
 function bindNoteInfoButtons(){
-	// $("#process-info-button").click(function(){
-	// 	$("#process-info-modal").modal("show");
-	// });
 
 	$(".info-button").click(function(){
 		var taskID = $(this).parent().parent().parent().parent().attr("id");
@@ -281,7 +289,7 @@ function bindNoteInfoButtons(){
 					var list = $("<ul></ul>");
 
 					$.each(task.comments, function(j, comment){
-						list.append("<li>" + comment + "</li>");
+						list.append("<li>" + comment.note + " (" + comment.datetime.date + " " + comment.datetime.time + ")</li>");
 					});
 
 					$("#old-comments").html(list);
@@ -314,30 +322,54 @@ function simulateVitals(){
 	}, 1000);
 }
 
+//CHANGE_HERE (Changed the comments by removing the date and time since it took up too much space)
 function generatePostDoc(){
-	// var doc = new jsPDF('p', 'mm');
-	// html2canvas($("body"), {background: "white"}).then(function(canvas) {
-	// 	// only jpeg is supported by jsPDF
-	// 	var imgData = canvas.toDataURL("image/jpeg", 0.6);
-	// 	doc.addImage(imgData, 'PNG', 0, 0);
-	// 	doc.save("download.pdf");
-	// });
+	var table = $("#post-documentation-table");
+	var tableBody = $("#post-documentation-table tbody");
 
-	var table = $("<table class='table'></table>");
-	var row = $("<tr></tr>");
-	var cell = $("<td></td>");
+	table.show();
+	tableBody.html("");
 
-	$.each(tree, function(i, task){
+	for(var i = 0; i < tree.length; i++){
+		var task = tree[i];
+		var comments = "";
 
-		var newRow = row;
+		for(var j = 0; j < task.comments.length; j++){
+			comments = comments + task.comments[j].note + "<br/>";
+		}
+
+		if(task.date === null) task.date = getDateTime();
+
+		var html = "<tr>";
+
+		html = html + "<td>" + task.name + "</td>";
+		html = html + "<td>" + task.date.date + "</td>";
+		html = html + "<td>" + task.date.time + "</td>";
+		html = html + "<td>98</td>";
+		html = html + "<td>27.5</td>";
+		html = html + "<td>98%</td>";
+		html = html + "<td>120/90</td>";
+		html = html + "<td>160</td>";
+		html = html + "<td>None</td>";
+		html = html + "<td>" + task.completed + "</td>";
+		html = html + "<td>Lamoureux, Erin</td>";
+		html = html + "<td>" + comments + "</td>";
+
+		html = html + "</tr>";
+
+		tableBody.append(html);
+	}
 
 
+	var doc = new jsPDF('l', 'mm');
 
+	html2canvas($("#post-documentation-table"), {background: "white"}).then(function(canvas) {
+		var imgData = canvas.toDataURL("image/jpeg", 1);
+		doc.addImage(imgData, 'PNG', 0, 0);
+		doc.save("post-doc.pdf");
+
+		table.hide();
 	});
-
-
-	var myWindow = window.open("", "Post Documentation", "width=600,height=600");
-	myWindow.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
 }
 
 //Modals
@@ -394,6 +426,8 @@ $('#exception-modal #terminate').on('click', function() {
 	}
 });
 
+//CHANGE_HERE (WHOLE LISTENER BELOW -- I changed the comments array to be an array of objects to store the comment and date/time)
+// Notes
 $("#save-note").on("click", function(){
 	// Get the id of the task adding note to
 	var taskID = $("#note-modal").attr('data-task');
@@ -402,7 +436,9 @@ $("#save-note").on("click", function(){
 	// Find the task in the tree
 	$.each(tree, function(i, task){
 		if(taskID == task.id){
-			task.comments.push(note + "		<b>(" + getDateTime() + ")</b>");
+			var dateTime = getDateTime();
+			task.comments.push({"note": note, "datetime": dateTime});
+			$("#" + taskID).find(".note-badge").text(task.comments.length);
 		}
 	});
 
