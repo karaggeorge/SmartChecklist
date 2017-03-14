@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>
+	<bean id="org.jwebsocket.plugins.extprocess.settings" class="org.jwebsocket.plugins.extprocess.Settings">
+		<property name="allowedProgs">
+			<map>
+				<!-- list of allowed programs to be called as external processes 
+					Please take care to add command line calls here only which 
+					do not rely on any user input but which communuicate via 
+					StdIn/StdOut only.
+				-->
+				<entry key="dir_demo" 
+					   value="C:/Windows/System32/cmd.exe /c dir ${1}" />
+				<entry key="perl_hello_world" 
+					   value="C:/Perl/bin/perl.exe ${JWEBSOCKET_HOME}conf/ExtProcessPlugIn/demos/perl/hello_world.pl Argument1 Argument2" />                
+			</map>
+		</property>
+	</bean>
+</beans>

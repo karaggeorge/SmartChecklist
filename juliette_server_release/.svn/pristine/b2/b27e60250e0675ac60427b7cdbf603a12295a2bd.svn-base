@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Get the canonical path to home directory
+ 
+BINDIR="`dirname $0`"
+if [ "${BINDIR:0:1}" != "/" ]; then
+  BINDIR="${PWD}/${BINDIR}"
+fi
+
+cd "${BINDIR}/.."
+INSTALLDIR="${PWD}"
+cd - > /dev/null
+
+# Find the various directories
+BINDIR="${INSTALLDIR}/bin"
+LIBDIR="${INSTALLDIR}/lib"
+JULDIR="${INSTALLDIR}/jul"
+ETCDIR="${INSTALLDIR}/etc"
+
+# Identify cygwin
+if [ "${OS}" == "Windows_NT" ]; then
+  CYGWIN=true;
+fi
+
+# Other files
+PIDFILE="${ETCDIR}/jgd.pid"
+
+# Java properties
+
+if [ -z ${CYGWIN} ]; then
+  JGD_SECURITY_PROPERTY="-Djava.security.manager -Djava.security.policy=${ETCDIR}/jgd.pol"
+  JGD_CLASSPATH="-cp ${LIBDIR}/jgd.jar"
+else
+  JGD_SECURITY_PROPERTY="-Djava.security.manager -Djava.security.policy=\"`cygpath -wp "${ETCDIR}/jgd.pol"`\""
+  JGD_CLASSPATH="-cp \"`cygpath -wp "${LIBDIR}/jgd.jar"`\""
+fi
+
+MAX_HEAP_SIZE=-Xmx256M
+
+CMD=$1
+HOST=$2
+
+case ${CMD} in
+  start)
+    if [ -r "${PIDFILE}" ]; then
+      echo "jgd: daemon already started."
+    else
+      if [ -z "${HOST}" ]; then
+        echo "jgd: missing server host argument"
+      else  
+        java ${MAX_HEAP_SIZE} ${JGD_CLASSPATH} ${JGD_SECURITY_PROPERTY} -Dlaser.juliette.server=${HOST} laser.juliette.grid.JGD ${HOST} &
+        echo $! > "${PIDFILE}"
+      fi
+    fi
+  ;;
+  stop)
+    if [ -r "${PIDFILE}" ]; then
+      kill `cat "${PIDFILE}"`
+    fi
+    rm -f "${PIDFILE}"
+  ;;
+  *)
+    echo "Usage: jgd [start SERVER_HOST | stop ]"
+esac

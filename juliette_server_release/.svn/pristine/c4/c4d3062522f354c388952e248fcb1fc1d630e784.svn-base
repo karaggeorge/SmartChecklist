@@ -1,0 +1,81 @@
+<project default="jars">
+    <property name="driver" location="../juliette-driver" />
+    <property name="interpreter" location="../juliette-interpreter" />
+    <property name="javabeans" location="../juliette-javabeans-objectmodel" />
+    <property name="archive" location="../juliette-archive-file" />
+    <property name="runtime" location="../juliette-runtime" />
+    <property name="lj" location="../little-jil-internal-form" />
+    <property name="ams" location="../juliette-rmi-ams" />
+    <property name="message" location="../juliette-rmi-messageservice" />
+    <property name="step" location="../juliette-rmi-stepservice" />
+    <property name="timer" location="../juliette-rmi-timerservice" />
+    <property name="vsrm" location="../juliette-vsrm" />
+    <property name="ljimpl" location="../little-jil-xml" />
+    <property name="jgd" location="../juliette-grid" />
+    <property name="agent" location="../juliette-agent" />
+    <property name="abort" location="../juliette-rmi-abortservice" />
+    <property name="core" location="../little-jil-core" />   
+    
+    <target name="jars" depends="server-jar, client-jar, jgd-jar, exts" />
+	
+	<target name="exts" depends="vsrm-exts" />
+	
+	<target name="server-jar">
+		<jar destfile="lib/juliette-server.jar">
+			<fileset dir="src" includes="laser/juliette/driver/configuration, laser/juliette/driver/properties" />
+			<fileset dir="${driver}" includes="**/*.class" />
+			<zipfileset src="${interpreter}/statemap.jar" includes="**/*.class" />
+			<fileset dir="${interpreter}" includes="**/*.class" />
+			<fileset dir="${javabeans}" includes="**/*.class" />
+			<zipfileset src="${javabeans}/bsh-core-2.0b4.jar" />
+			<fileset dir="${archive}" includes="**/*.class, laser/juliette/jul/jul.dtd" />
+			<fileset dir="${runtime}" includes="**/*.class" />
+			<fileset dir="${lj}" includes="**/*.class" />
+			<fileset dir="${ams}" includes="**/*.class, laser/juliette/ams/configuration" />
+			<fileset dir="${message}" includes="**/*.class, laser/juliette/message/configuration" />
+			<fileset dir="${step}" includes="**/*.class" />
+			<fileset dir="${timer}" includes="**/*.class" />
+			<fileset dir="${vsrm}" includes="**/*.class" />
+			<fileset dir="${ljimpl}" includes="**/*.class, laser/lj/xml/littlejil.dtd, laser/lj/ast/configuration" />
+			<fileset dir="${jgd}" includes="**/*.class" />
+			<fileset dir="${agent}" includes="**/*.class" />
+			<fileset dir="${abort}" includes="**/*.class" />
+			<fileset dir="${core}" includes="**/*.class" />
+		</jar>
+	</target>
+	
+	<target name="client-jar">
+		<jar destfile="lib/juliette-client.jar">
+			<fileset dir="${agent}" includes="**/*.class, , laser/juliette/ams/configuration" />
+			<fileset dir="${javabeans}" includes="**/*.class" />
+			<fileset dir="${runtime}" includes="**/*.class" />
+			<fileset dir="${lj}" includes="**/*.class" />
+			<fileset dir="${ams}" includes="**/client/*.class, **/server/api/*.class, **/*_Stub.class" />
+			<fileset dir="${message}" includes="**/*_Stub.class, laser/juliette/message/rmi/SenderClient.class, laser/juliette/message/configuration" />
+			<fileset dir="${step}" includes="**/*.class" />
+			<fileset dir="${ljimpl}" includes="**/*.class, laser/lj/xml/littlejil.dtd, laser/lj/ast/configuration" />
+			<fileset dir="${core}" includes="**/*.class" />
+		</jar>
+	</target>
+	
+	<target name="jgd-jar">
+		<jar destfile="lib/jgd.jar">
+			<fileset dir="${jgd}" includes="**/*.class" />
+			<fileset dir="${agent}" includes="**/*.class, , laser/juliette/ams/configuration" />
+			<fileset dir="${javabeans}" includes="**/*.class" />
+			<fileset dir="${runtime}" includes="**/*.class" />
+			<fileset dir="${lj}" includes="**/*.class" />
+			<fileset dir="${ams}" includes="**/client/*.class, **/server/api/*.class, **/*_Stub.class" />
+			<fileset dir="${message}" includes="**/*_Stub.class, laser/juliette/message/rmi/SenderClient.class, laser/juliette/message/configuration" />
+			<fileset dir="${step}" includes="**/*.class" />
+			<fileset dir="${ljimpl}" includes="**/*.class, laser/lj/xml/littlejil.dtd, laser/lj/ast/configuration" />
+			<fileset dir="${core}" includes="**/*.class" />
+		</jar>
+	</target>
+	
+	<target name="vsrm-exts">
+		<jar destfile="ext/vsrm-exts.jar">
+			<fileset dir="${vsrm}" includes="**/*.class" />
+		</jar>
+	</target>
+</project>

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Document   : jWebSocketJMSClusterNode03.xml
+	Created on : May 20 2015, 00:25 AM
+	Author     : Rolando Santamaria Maso
+	Description: Configuration file for a minimum jWebSocket server cluster + Scripting plug-in
+	runtime environment. Node: 03
+-->
+<jWebSocket>
+	<installation>prod</installation>
+	<protocol>json</protocol>
+	<node_id>03</node_id>
+	
+	<libraries>
+	</libraries>
+
+	<!-- jWebSocket logging configuration -->
+	<logging>
+		<log4j>
+			<config>${JWEBSOCKET_HOME}conf/log4j.xml</config>
+			<autoreload>20000</autoreload>
+		</log4j>
+	</logging>
+
+	<initializerClass>org.jwebsocket.factory.JWebSocketInitializer</initializerClass>
+
+	<engines>
+		
+		<!-- JMS Engine Configuration -->
+		<engine>
+			<name>org.jwebsocket.jms.JMSEngine</name>
+			<id>jms0</id>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<port>0</port>
+			<sslport>0</sslport>
+			<keystore>NA</keystore>
+			<password>NA</password>
+			<maxframesize>1048840</maxframesize>
+			<domains>
+				<domain>NA</domain>
+			</domains>
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_HOME}conf/JMSEngine/cluster.xml</setting>
+			</settings>		
+		</engine>
+	</engines>
+
+	<!-- server types to be instantiated for jWebSocket -->
+	<servers>
+		<server>
+			<name>org.jwebsocket.jms.JMSServer</name>
+			<id>ts0</id>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<threadPool>
+				<corePoolSize>10</corePoolSize>
+				<maximumPoolSize>100</maximumPoolSize>
+				<keepAliveTime>60</keepAliveTime>
+				<blockingQueueSize>1000</blockingQueueSize>
+			</threadPool>
+			<settings>
+				<setting key="supressed_log_fields">password,newPassword,secretPassword,accessPassword</setting>
+				<setting key="supressed_log_fields_value">*****</setting>
+			</settings>
+		</server>
+	</servers>
+
+	<!-- jWebSocket global rights -->
+	<rights>
+		<right>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>broadcast</id>
+			<description>Broadcast message to all other clients.</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>send</id>
+			<description>Send message to a single target client.</description>
+		</right>
+		<!-- ClusterAdmin plug-in rights -->
+		<right>
+			<ns>org.jwebsocket.plugins.clusteradmin</ns>
+			<id>pausenode</id>
+			<description>Allows to pause/resume a jWebSocket cluster node.</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.clusteradmin</ns>
+			<id>shutdownnode</id>
+			<description>Allows to shutdown a jWebSocket cluster node.</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.clusteradmin</ns>
+			<id>getinfo</id>
+			<description>Allows to get information from the jWebSocket cluster.</description>
+		</right>
+
+		<!-- Scripting rights -->
+		<right>
+			<ns>org.jwebsocket.plugins.scripting</ns>
+			<id>reloadApp.*</id>
+			<description>Allows to reload script apps in runtime</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.scripting</ns>
+			<id>deploy.*</id>
+			<description>Allows to deploy script apps in runtime</description>
+		</right>
+		
+		<!-- Filesystem plug-in specific rights -->
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>load</id>
+			<description>Allows to load files from file system</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>save</id>
+			<description>Allows to save files on the server's alias based file system</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>append</id>
+			<description>Allows to append files on the server's alias based file system</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>delete</id>
+			<description>Allows to delete files from file system (private area)</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>exists</id>
+			<description>Allows to detect if a file exists</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>send</id>
+			<description>Allows to send files from one client to another client</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>getFilelist</id>
+			<description>Allows to retrieve file lists from file system</description>
+		</right>
+		<right>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<id>observe</id>
+			<description>Allows to monitor changes in files of the file system</description>
+		</right>
+	</rights>
+
+	<!-- jWebSocket roles -->
+	<roles>
+		<role>
+			<id>Administrator</id>
+			<description>Administrators</description>
+			<rights>
+				<!-- ClusterAdmin plug-in rights -->
+				<right>org.jwebsocket.plugins.clusteradmin.getinfo</right>
+				<right>org.jwebsocket.plugins.clusteradmin.pausenode</right>
+				<right>org.jwebsocket.plugins.clusteradmin.shutdownnode</right>
+				
+				<!-- System plug-in rights -->
+				<right>org.jwebsocket.plugins.system.broadcast</right>
+				<right>org.jwebsocket.plugins.system.send</right>
+				
+				<!-- Scripting plug-in rights -->
+				<right>org.jwebsocket.plugins.scripting.reloadApp.*</right>
+				<right>org.jwebsocket.plugins.scripting.deploy.*</right>
+
+				<!-- Filesystem rights -->
+				<right>org.jwebsocket.plugins.filesystem.load</right>
+				<right>org.jwebsocket.plugins.filesystem.save</right>
+				<right>org.jwebsocket.plugins.filesystem.append</right>
+				<right>org.jwebsocket.plugins.filesystem.delete</right>
+				<right>org.jwebsocket.plugins.filesystem.exists</right>
+				<right>org.jwebsocket.plugins.filesystem.send</right>
+				<right>org.jwebsocket.plugins.filesystem.getFilelist</right>
+				<right>org.jwebsocket.plugins.filesystem.observe</right>
+			</rights>
+		</role>
+		<role>
+			<id>User</id>
+			<description>Registered and authenticated users.</description>
+			<rights>
+				<!-- list of rights for "User" role (ns + . + id) -->
+				<right>org.jwebsocket.plugins.system.broadcast</right>
+				<right>org.jwebsocket.plugins.system.send</right>
+			</rights>
+		</role>
+	</roles>
+
+	<users>
+		<user>
+			<uuid>000-000-002-2011-07-14-11-33-20-493</uuid>
+			<loginname>user</loginname>
+			<firstname>jWebSocket Authenticated User</firstname>
+			<lastname>(User Role)</lastname>
+			<password>user</password>
+			<description>jWebSocket Standard User</description>
+			<status>1</status>
+			<roles>
+				<role>User</role>
+			</roles>
+		</user>
+		<user>
+			<uuid>000-000-003-2011-07-14-11-34-17-189</uuid>
+			<loginname>root</loginname>
+			<firstname>jWebSocket Root User</firstname>
+			<lastname>(Administrator Role)</lastname>
+			<password>root</password>
+			<description>jWebSocket Root User</description>
+			<status>1</status>
+			<roles>
+				<role>User</role>
+				<role>Administrator</role>
+			</roles>
+		</user>
+	</users>
+	<plugins>
+		<!-- the system plug-in, do not remove, mandatory for basic WebsScket communication operations -->
+		<plugin>
+			<name>org.jwebsocket.plugins.system.SystemPlugIn</name>
+			<ns>org.jwebsocket.plugins.system</ns>
+			<id>jws.system</id>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<!-- plug-in specific settings -->
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_HOME}conf/SystemPlugIn/system.xml</setting>
+				<setting key="broadcastOpenEvent">true</setting>
+				<setting key="broadcastCloseEvent">true</setting>
+				<setting key="broadcastLoginEvent">true</setting>
+				<setting key="broadcastLogoutEvent">true</setting>
+				<setting key="allowAnonymousLogin">true</setting>
+				<setting key="anonymousLoginName">anonymous</setting>
+				<setting key="loginNameCaseInsensitive">true</setting>
+				<setting key="allowAutoAnonymous">true</setting>
+			</settings>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</plugin>
+		
+       <!-- filesystem plug-in to access server files via WebSockets -->
+		<plugin>
+			<name>org.jwebsocket.plugins.filesystem.FileSystemPlugIn</name>
+			<id>jws.filesystem</id>
+			<ns>org.jwebsocket.plugins.filesystem</ns>
+			<jars>
+				<jar>${JWEBSOCKET_HOME}libs/jWebSocketFileSystemPlugIn-1.0.jar</jar>
+			</jars>
+			<!-- plug-in specific settings -->
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_HOME}conf/FileSystemPlugIn/filesystem.xml</setting>
+				<!-- Authorization method 
+				     - spring: Uses the user Spring authentication to check for granted authorities 
+					 - embedded: Uses the user embedded (jWebSocket.xml users definition) authentication
+					   to check for granted authorities (rights)
+					   
+					 Default value is "spring"
+					   
+					 Required user authorities for the FileSystem plug-in:
+					 - org.jwebsocket.plugins.filesystem.load
+					 - org.jwebsocket.plugins.filesystem.save
+					 - org.jwebsocket.plugins.filesystem.append
+					 - org.jwebsocket.plugins.filesystem.delete
+					 - org.jwebsocket.plugins.filesystem.exists
+					 - org.jwebsocket.plugins.filesystem.send
+					 - org.jwebsocket.plugins.filesystem.getFilelist
+					 - org.jwebsocket.plugins.filesystem.observe
+				-->
+				<!-- <setting key="authentication_method">spring</setting> -->
+				<setting key="alias:privateDir">${JWEBSOCKET_HOME}filesystem/private/{username}/</setting>
+				<setting key="alias:publicDir">${JWEBSOCKET_HOME}filesystem/public/</setting>
+				<setting key="alias:webRoot">http://localhost/public/</setting>
+			</settings>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</plugin>
+		 
+		<!-- Scripting plug-in for server-side JavaScript development -->
+		<plugin>
+			<name>org.jwebsocket.plugins.scripting.ScriptingPlugIn</name>
+			<id>jWebSocketScriptingPlugIn</id>
+			<jar>jWebSocketScriptingPlugIn-1.0.jar</jar>
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_HOME}conf/ScriptingPlugIn/scripting.xml</setting>
+			</settings>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</plugin>
+		
+		<!-- ClusterAdmin plug-in for JMS cluster administration 
+		<plugin>
+			<name>org.jwebsocket.enterprise.cluster.jms.JMSClusterAdminPlugIn</name>
+			<id>jWebSocketJMSClusterAdminPlugInEE</id>
+			<jars>
+				<jar>${JWEBSOCKET_EE_HOME}libs/jWebSocketJMSClusterAdminPlugInEE-1.0.jar</jar>
+			</jars>
+			<settings>
+				<setting key="spring_config">${JWEBSOCKET_EE_HOME}conf/JWSClusterAdminPlugInEE/jmsclusteradmin.xml</setting>
+			</settings>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</plugin>
+		-->
+	</plugins>
+
+	<filters>
+		<filter>
+			<name>org.jwebsocket.filters.system.SystemFilter</name>
+			<id>jws.sampleFilter</id>
+			<ns>org.jwebsocket.filters.system</ns>
+			<jar>jWebSocketServer-1.0.jar</jar>
+			<server-assignments>
+				<server-assignment>ts0</server-assignment>
+			</server-assignments>
+		</filter>
+	</filters>
+
+</jWebSocket>

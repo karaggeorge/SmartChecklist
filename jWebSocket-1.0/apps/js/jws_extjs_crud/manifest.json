@@ -1,0 +1,7 @@
+{
+	"language_ext": "js",
+	"jws_version": "1.0.0",
+	"jws_dependencies": ["jws.system"],
+	"permissions": [],
+	"author": "Aquiles Perez Miranda"
+}

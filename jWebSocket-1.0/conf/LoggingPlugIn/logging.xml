@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>
+
+	<!-- this is the simple log4j logger which logs to all targets configured in the log4j.xml -->
+	<bean id="targetLog4J" class="org.jwebsocket.plugins.logging.ClientLogger">
+	</bean>
+
+	<bean id="demoAppender" class="org.jwebsocket.plugins.logging.DemoAppender">
+	</bean>
+
+	<bean id="jdbcAppender" class="org.jwebsocket.plugins.logging.JWSJDBCAppender">
+		<property name="JDBCConnAlias" value="jwsLogging"/>
+		<property name="JDBCPlugInID" value="jws.jdbc"/>
+		<property name="TableName" value="logs_table"/>
+		<!-- Cleanup Interval and LogDuration are configured with one of the 
+		following values: <value Integer><MICROSECOND | SECOND | MINUTE | 
+		HOUR | DAY | WEEK | MONTH | QUARTER| YEAR>
+		the cleanup mechanism will be executed by the first time on server startup -->
+		<property name="CleanupInterval" value="1 DAY"/>
+		<!-- Log Duration in the database, for example, a LogDuration=1DAY 
+		indicates to MySQL server to remove the logs with date less than 
+		1 day before the current date -->
+		<!-- MICROSECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, YEAR --> 
+		<property name="LogDuration" value="1 MONTH"/>
+		<property name="CleanupQuery">
+			<value><![CDATA[DELETE FROM `${db_table}` WHERE `time_stamp` < ADDDATE(NOW(), INTERVAL - ${log_duration});]]></value>
+		</property>
+		
+		<property name="CreateTableQuery" value="CREATE TABLE 
+			IF NOT EXISTS ${db_table} (id int(20) unsigned NOT NULL auto_increment, message varchar(10000),
+			time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, level varchar(20), class_name varchar(255), 
+			method_name varchar(255), line_number int(20), filename varchar(300), 
+			logger_name varchar(255), thread_name varchar(255), 
+			stack_trace varchar(1024) not null, username varchar(50) not null, 
+			ip_number varchar(40), hostname varchar(255), product varchar(255), 
+			module varchar(255), classification varchar(255), version varchar(255), 
+			environment varchar(255), error_code varchar(255), system varchar(255), 
+			system_version varchar(255), condition_value varchar(255), source varchar(255), 
+			target varchar(255),connector_id varchar(255), primary key (id));"/>
+		<property name="InsertQuery" value="INSERT INTO ${db_table} (time_stamp, level, class_name, 
+			method_name, line_number, filename, logger_name, thread_name, 
+			stack_trace, message, username, ip_number, hostname, product,
+			module, classification, version, environment, error_code,
+			system, system_version, condition_value, source, target, connector_id) VALUES 
+			('%d{yyyy-MM-dd HH:mm:ss}','%p', '%c', '%M', '%L', '%f', '%g', '%T', '%s', '%m', '%u', 
+			'%n', '%h', '%P', '%D', '%C', '%v', '%e', '%E', '%S', '%V', '%o', 
+			'%U', '%G', '%O')"/>
+		
+		<!-- fieldFilterList, this property allows us to set a certain 
+		white/black List configuration patterns that will restrict the 
+		events that are being logged in the database.
+		For example, if we only want to log the TokenServer class 
+		information, then we need to add the following configuration:
+			<property name="fieldName" value="class_name" />
+			<property name="blackList" value="*" />
+			<property name="whiteList" value="*TokenServer" />
+		Other pattern configurations could be:
+			<property name="blackList" value="startsWith*, *contains*, *endsWith, equals" />
+		NOTE: Please don't use wildcard for whiteList and blackList at the 
+		same time, this doesn't make any sense
+		Uncomment the below configuration to see it working
+		-->
+		<!--<property name="fieldFilterList">
+			<list>
+				<bean class="org.jwebsocket.logging.LoggingEventFieldFilter">
+					<property name="fieldName" value="class_name" />
+					<property name="whiteList" value="*" />
+					<property name="blackList" value="*TokenServer" />
+				</bean>
+				<bean class="org.jwebsocket.logging.LoggingEventFieldFilter">
+					<property name="fieldName" value="hostname" />
+					<property name="blackList" value="localhost" />
+				</bean>
+			</list>
+		</property>-->
+	</bean>
+
+	<!-- here you configure which logger of the above ones to use in the plug-in -->
+	<bean id="org.jwebsocket.plugins.logging.settings" class="org.jwebsocket.plugins.logging.Settings">
+		<property name="target" ref="targetLog4J"/>
+		<property name="appenders">
+			<list>
+				<!-- Select here the appenders to be used -->
+				<ref local="demoAppender"/>
+				<!--<ref local="jdbcAppender"/>-->
+			</list>
+		</property>
+	</bean>
+
+</beans>

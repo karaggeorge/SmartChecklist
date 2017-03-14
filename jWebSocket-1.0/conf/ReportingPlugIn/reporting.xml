@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>
+    <bean id="org.jwebsocket.plugins.reporting.settings" class="org.jwebsocket.plugins.reporting.Settings">
+		<!-- The reportFolder specifies the folder of the Jasper Reports .jrxml files 
+			 this folder should not be accessible from the outside.
+		-->
+		<property name="reportFolder" value="${JWEBSOCKET_HOME}conf/ReportingPlugIn/reports"/>
+		<!-- The outputFolder specifies where the resulting reports are located.
+			 This folder needs to be accessible when you intent to release the 
+			 reports (.pdf files) to a browser. In this this folder needs exist 
+			 and to be  accessible by the web or application server.
+		-->
+		<property name="outputFolder" value="${USER_HOME}/reports/"/>
+		<!-- The jdbcAliasTest specifies the alias of the jdbc connection to use 
+			 in those reports that require it
+		-->
+		<property name="jdbcAlias" value="default"/>
+	</bean>
+	
+	<bean id="jrService" class="org.jwebsocket.plugins.reporting.service.JasperReportService">
+		<property name="settings" ref="org.jwebsocket.plugins.reporting.settings" />
+	</bean>
+
+</beans>

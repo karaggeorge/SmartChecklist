@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>
+	<bean id="org.jwebsocket.plugins.scripting.settings" class="org.jwebsocket.plugins.scripting.Settings"
+		  init-method="initialize">
+		<property name="appsDirectory" value="${JWEBSOCKET_HOME}/apps/js" />
+		<property name="extensionsDirectory" value="${JWEBSOCKET_HOME}/conf/ScriptingPlugIn/extensions" />
+		<property name="globalSecurityPermissions">
+			<list>
+				<value>permission java.io.FilePermission "${APP_HOME}/-", "read,write,delete"</value>
+				<value>permission java.io.FilePermission "${JWEBSOCKET_HOME}/conf/spring-beans.dtd", "read"</value>
+				<value>permission java.io.FilePermission "${JWEBSOCKET_HOME}/conf/ScriptingPlugIn/extensions/-", "read"</value>
+				<value>permission java.util.PropertyPermission "org.apache.activemq.UseDedicatedTaskRunner", "read"</value>
+				
+				<value>permission java.security.AllPermission</value>
+			</list>
+		</property>
+		<property name="appsSecurityPermissions">
+			<map>
+				<entry key="notebook">
+					<list>
+						<value>permission java.net.SocketPermission "localhost", "resolve,connect"</value>
+						<value>permission javax.management.MBeanPermission "*", "registerMBean"</value>
+						<value>permission java.util.PropertyPermission "*", "read"</value>
+						<value>permission java.util.logging.LoggingPermission "control"</value>
+					</list>
+				</entry>
+				<entry key="backbone">
+					<list>
+						<value>permission java.security.AllPermission</value>
+					</list>
+				</entry>
+				<entry key="jws_extjs_crud">
+					<list>
+						<value>permission java.security.AllPermission</value>
+					</list>
+				</entry>				
+			</map>
+		</property>
+	
+		<property name="globalWhiteListedBeans">
+			<list>
+				<!--				
+				<value>bean_id</value>
+				<value>bean_factory_namespace:bean_id</value>
+				<value>bean_factory_namespace:*</value>
+				<value>*:*</value>
+				-->
+			</list>
+		</property>
+		<!--
+		<property name="appsWhiteListedBeans">
+			<map>
+				<entry key="yourAppName">
+					<list>
+						<value>bean_factory_namespace:bean_id</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+		-->
+	</bean>
+</beans>

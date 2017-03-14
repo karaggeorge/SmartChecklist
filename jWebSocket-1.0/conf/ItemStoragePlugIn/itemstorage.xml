@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>
+
+	<!-- Memory Storage -->
+	<bean id="itemFactory" class="org.jwebsocket.plugins.itemstorage.memory.MemoryItemFactory">
+		<property name="definitions">
+			<set>
+				<bean class="org.jwebsocket.plugins.itemstorage.item.ItemDefinition">
+					<property name="type" value="contact" />
+					<property name="primaryKeyAttribute" value="username" />
+					<property name="attributeTypes">
+						<map>
+							<entry key="name" value="string"/>
+							<entry key="mailAddress" value="string"/>
+							<entry key="siteURL" value="string"/>
+							<entry key="comment" value="string"/>
+							<entry key="image" value="string"/>
+							<entry key="sex" value="boolean"/>
+						</map>
+					</property>
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<bean id="itemStorageProvider" class="org.jwebsocket.plugins.itemstorage.memory.MemoryItemStorageProvider">
+		<constructor-arg ref="itemFactory"/>
+	</bean>
+
+	<bean id="collectionProvider" class="org.jwebsocket.plugins.itemstorage.memory.MemoryItemCollectionProvider">
+		<constructor-arg ref="itemStorageProvider"/>
+	</bean>
+	
+	<!-- Listeners Registrator -->
+	<bean id="listenersRegistrator" class="org.jwebsocket.plugins.itemstorage.event.ListenersRegistrator">
+		<property name="listeners">
+			<list>
+				
+			</list>
+		</property>
+	</bean>
+</beans>

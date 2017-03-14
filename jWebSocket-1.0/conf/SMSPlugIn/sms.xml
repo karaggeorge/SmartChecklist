@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" " http://www.springframework.org/dtd/spring-beans.dtd"> 
+<beans>	
+	
+	<!-- CAUTION! SECURITY ADVISE!
+			please take care that the following settings do not get
+			disclosed to anybody. Publishing this data will allow
+			others to use your SMS account on behalf of you which may 
+			lead to spam attacks and costs!
+	-->
+
+	<!-- this is the configuration for the provider -->
+	<bean id="nullProvider" class="org.jwebsocket.plugins.sms.NullProvider">
+	</bean>
+	<bean id="providerSmstrade" class="org.jwebsocket.plugins.sms.ProviderSmstrade">
+		<property name="key" value="#your key at SMSTrade#"/>
+	</bean>
+	
+
+	<!-- general SMS plug-in settings -->
+	<bean id="org.jwebsocket.plugins.sms.settings" class="org.jwebsocket.plugins.sms.Settings">
+		<property name="provider" ref="nullProvider"/>
+		<property name="collectionName" value="jws_plugin_sms"/>
+		<property name="collectionAccessPassword" value="63a9f0ea7bb98050796b649e85481845"/>
+		<property name="collectionSecretPassword" value="63a9f0ea7bb98050796b649e85481845"/>
+	</bean>
+	
+	<!-- SMS item definition for item storage CE -->
+	<bean id="smsDefinition" class="org.jwebsocket.plugins.itemstorage.item.ItemDefinition">
+		<property name="type" value="org.jwebsocket.plugins.sms.SMS" />
+		<property name="primaryKeyAttribute" value="id" />
+		<property name="attributeTypes">
+			<map>
+				<entry key="time" value="long"/>
+				<entry key="length" value="integer"/>
+				<entry key="message" value="string"/>
+				<entry key="from" value="string"/>
+				<entry key="to" value="string"/>
+				<entry key="user" value="string"/>
+				<entry key="state" value="string"/>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- SMS item definition for item storage EE 
+	<bean id="smsDefinition" class="org.jwebsocket.plugins.itemstorage.item.ItemDefinition">
+		<property name="type" value="org.jwebsocket.plugins.sms.SMS"/>
+		<property name="primaryKeyAttribute" value="id" />
+		<property name="attributeTypes">
+			<map>
+				<entry key="time" value="long" />
+				<entry key="length" value="integer" />
+				<entry key="message">
+					<bean class="org.jwebsocket.enterprise.plugins.itemstorage.item.MapAttributeDef" factory-method="generateDef">
+						<constructor-arg index="0" value="string" />
+						<constructor-arg index="1">
+							<map>
+								<entry key="required">
+									<bean class="java.lang.Boolean">
+										<constructor-arg index="0" value="true" />
+									</bean>
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</entry>
+				<entry key="from">
+					<bean class="org.jwebsocket.enterprise.plugins.itemstorage.item.MapAttributeDef" factory-method="generateDef">
+						<constructor-arg index="0" value="string" />
+						<constructor-arg index="1">
+							<map>
+								<entry key="required">
+									<bean class="java.lang.Boolean">
+										<constructor-arg index="0" value="true" />
+									</bean>
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</entry>
+				<entry key="to">
+					<bean class="org.jwebsocket.enterprise.plugins.itemstorage.item.MapAttributeDef" factory-method="generateDef">
+						<constructor-arg index="0" value="string" />
+						<constructor-arg index="1">
+							<map>
+								<entry key="required">
+									<bean class="java.lang.Boolean">
+										<constructor-arg index="0" value="true" />
+									</bean>
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</entry>
+				<entry key="user">
+					<bean class="org.jwebsocket.enterprise.plugins.itemstorage.item.MapAttributeDef" factory-method="generateDef">
+						<constructor-arg index="0" value="string" />
+						<constructor-arg index="1">
+							<map>
+								<entry key="required">
+									<bean class="java.lang.Boolean">
+										<constructor-arg index="0" value="true" />
+									</bean>
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</entry>
+				<entry key="state">
+					<bean class="org.jwebsocket.enterprise.plugins.itemstorage.item.MapAttributeDef" factory-method="generateDef">
+						<constructor-arg index="0" value="string" />
+						<constructor-arg index="1">
+							<map>
+								<entry key="required">
+									<bean class="java.lang.Boolean">
+										<constructor-arg index="0" value="true" />
+									</bean>
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	-->
+</beans>
