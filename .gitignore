@@ -28,7 +28,7 @@
 *.sqlite
 
 !juls-and-scripts/juliette-client.jar
-!juliette_server_release/*
+!juliette_server_release/**
 
 # OS generated files #
 ######################
