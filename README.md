@@ -8,7 +8,7 @@ This is a web-based implementation of the Smart Checklist.
 1. Clone or download and extract the repository
 2. Download the jWebSocket Server from [here](http://cdn.jwebsocket.org/jwebsocket-1.0/jWebSocketServer-1.0.zip)
 3. Add the following environment variables to your ~/.bash_profile file
-  - Set JWEBSOCKET_HOME to the root directory of the jWebSocket Server
+  - Set JWEBSOCKET_HOME to the root directory of the jWebSocket Server (make sure you don't include a final / in this path)
   - Add to CLASSPATH the following:
     - $JWEBSOCKET_HOME/
     - $JWEBSOCKET_HOME/libs/jWebSocketServer-1.0.jar

@@ -1,5 +1,4 @@
 #!/bin/bash
-export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home;
 jul stop
 cd ..
 javac laser/bt/agents/*.java
