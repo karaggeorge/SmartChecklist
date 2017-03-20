@@ -4,7 +4,6 @@
 	<title>Smart Checklists | Blood Transfusion Process</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/index.css">
-
 </head>
 <body class="container">
 	<!-- Header with title and agent name -->
@@ -64,7 +63,7 @@
 				<h4 style="text-transform: uppercase;">Transfer one unit of packed red blood cells (PRBCS)</h4>
 			</div>
 			<div class="col-lg-3 col-md-3">
-				<h4><i>In-progress</i></h4>
+				<h4><i id="process-status">In-progress</i></h4>
 			</div>
 			<div class="col-lg-1 col-md-1">
 				<img src="img/info.png" alt="Info button" class="info-button" id="process-info-button">
@@ -277,13 +276,66 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Change Element Color</h4>
+					
+					<h4 class="modal-title page-header">Change Element Color</h4>
 
-					<input type="color" value="#ff0000" id="color-picker" class="form-control">
+					<div class="row mt10">
+						<div class="col-lg-6 col-md-6">
+							<p>Patient Info Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-id="patient-info">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Process Info Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-id="process-info">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Active Parent Task Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="parent-task">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Active Child Task Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Completed/Terminated Task Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task.completed, child-task.terminated"> 
+							</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Font Size:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task.completed, child-task.terminated"> 
+							</div>
+					</div>
 
 					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-danger" id="set-colors">Set</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Set</button>
 					</div>
 				</div>
 
@@ -359,6 +411,7 @@
 		</div>
 	</div>
 
+	<!-- Hidden table to be used to export the post documentation -->
 	<div class="container" id="post-documentation-table" style="display:none;width: 1100px">
 		<h1>Transfuse One Unit of Packed Red Blood Cells (PRBCs)</h1>
 		<p>Last Updated: <span class="updated">Fri Jun 24 17:25:39 EDT 2016</span>; Created: <span class="created">Fri Jun 24 17:25:03 EDT 2016</span></p>

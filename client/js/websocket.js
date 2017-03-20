@@ -1,20 +1,20 @@
 var connection = new WebSocket('ws://localhost:8787', 'json');
 
 connection.onopen = function () {
-  console.log('Connectionned');
+	console.log('Connected');
 	sendMessage("START");
 };
 connection.onerror = function (error) {
-  console.log('WebSocketor ' + error);
+	console.log('WebSocket: ' + error);
 };
 connection.onmessage = function (e) {
-  console.log('received message ' + e.data);
+	console.log('Received Message: ' + e.data);
 	processLine(e.data);
 };
 
 function sendMessage(msg){
-  console.log('sending message ' + msg);
-  connection.send(msg);
+	console.log('Sending Message: ' + msg);
+	connection.send(msg);
 }
 
 const completedMessage = "The process was completed successfully!";
@@ -25,9 +25,19 @@ function processLine(req) {
 		const steps = req.substring(6);
 		manageNewTasks(steps.split('|%|'));
 	} else if(req.startsWith('END ')) {
-    const result = req.substring(4) === "true" ? completedMessage : terminatedMessage;
-    alert(result);
-  } else {
-		console.log('Unknown request ' + req);
+
+		var completed = req.substring(4) === "true";
+
+		if(completed){
+			alert(completedMessage);
+			$("#process-status").text("Completed");
+		}
+		else{
+			alert(terminatedMessage);
+			$("#process-status").text("Terminated");
+		}
+	} 
+	else {
+		console.error('Unknown Request: ' + req);
 	}
 }

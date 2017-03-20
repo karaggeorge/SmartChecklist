@@ -58,11 +58,7 @@ function displayTask(i) {
 	const task = tree[i];
 	if(task.parentId == -1 || task.displayed) return;
 	if(task.parentId == 0 && !task.displayed){
-		// const newTask = $($("#template-task").html());
-		// newTask.find(".parent-task-title").text(task.name);
-		// newTask.attr('id', task.id);
-		// $("#main-task-container").append( newTask );
-		// tree[i].displayed = true;
+
 		if(task.isLeaf) {
 			addLeafTask('main-task-container', task);
 		} else {
@@ -82,8 +78,6 @@ function displayTask(i) {
 }
 
 function addToTree(decodedTasks) {
-	// if(tree.length == 0) createTree(decodedTasks);
-	// buildTree(decodedTasks, 0);
 	for(mi = 0;mi < decodedTasks.length;mi++) {
 		console.log("Sending:");
 		console.log(decodedTasks[mi])
@@ -128,7 +122,6 @@ function createTree(decodedTasks) {
 			tree[0] = decodedTasks[i];
 			tree[0].parentId = -1;
 			tree[0].pos = 0;
-			// map[decodedTasks[i].name] = 0;
 			taskNum = 1;
 			break;
 		}
@@ -144,7 +137,6 @@ function buildTree(tasks, index) {
 			tasks[i].parentId = index;
 			tasks[i].pos = tree.length;
 			tree.push(tasks[i]);
-			// map[tasks[i].name] = tree.length-1;
 			buildTree(tasks, tree.length-1);
 		}
 	}

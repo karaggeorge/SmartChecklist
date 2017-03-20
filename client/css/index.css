@@ -59,18 +59,15 @@
 	width: 100%;
 }
 
-.done,
-.failed {
+.done, .failed {
 	display: none;
 }
 
-.child-task.completed,
-.child-task.terminated {
+.child-task.completed, .child-task.terminated {
 	background-color: #EEE;
 }
 
-.completed .current,
-.terminated .current {
+.completed .current, .terminated .current {
 	display: none;
 }
 

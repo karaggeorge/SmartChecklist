@@ -60,26 +60,30 @@ $(document).on("click", ".note-button", function(){
 });
 
 $(document).on("click", ".edit-color", function(){
-	var parentID = $(this).attr("data-parent");
-
-	$("#color-picker-modal").attr("data-element", parentID);
 	$("#color-picker-modal").modal("show");
 });
 
-//When the modal is closed - Change to only when the set button is clicked
-$('#color-picker-modal').on('hide.bs.modal', function(event) {
-	const modal = $(this);
-	var element = $("#color-picker-modal").attr("data-element");
-	var color = $("#color-picker").val();
+$("#set-colors").click(function(){
+	var modal = $('#color-picker-modal');
+	var inputs = modal.find("input");
+	
+	$.each(inputs, function(i, input){
+		input = $(input);
 
-	console.log(element, color);
-
-	$("#" + element).css("background-color", color);
+		if(input.attr("data-id")){
+			$("#" + input.attr("data-id")).css("background-color", input.val());
+		}
+		else if(input.attr("data-class")){
+			var classes = input.attr("data-class").split(",");
+			$.each(classes, function(j, theClass){
+				$("." + theClass.trim()).css("background-color", input.val());;
+			});
+		}
+	});
 });
 
 //Modals
 
-//Exceptions Modal
 $('#exception-modal').on('show.bs.modal', function(event) {
 	const button = $(event.relatedTarget);
 	const taskId = button.attr('id');
