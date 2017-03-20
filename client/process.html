@@ -261,10 +261,7 @@
 						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 					</div>
 				</div>
-
-
 			</div>
-
 		</div>
 	</div>
 
@@ -284,7 +281,7 @@
 							<p>Patient Info Color:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-id="patient-info">
+							<input type="color" value="#ff0000" class="form-control" data-query="#patient-info" data-change="background-color">
 						</div>
 					</div>
 
@@ -293,7 +290,7 @@
 							<p>Process Info Color:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-id="process-info">
+							<input type="color" value="#ff0000" class="form-control" data-query="#process-info" data-change="background-color">
 						</div>
 					</div>
 
@@ -302,7 +299,7 @@
 							<p>Active Parent Task Color:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="parent-task">
+							<input type="color" value="#ff0000" class="form-control" data-query=".parent-task" data-change="background-color">
 						</div>
 					</div>
 
@@ -311,17 +308,26 @@
 							<p>Active Child Task Color:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task">
+							<input type="color" value="#ff0000" class="form-control" data-query=".child-task" data-change="background-color">
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-lg-6 col-md-6">
-							<p>Completed/Terminated Task Color:</p>
+							<p>Completed Task Color:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task.completed, child-task.terminated"> 
-							</div>
+							<input type="color" value="#ff0000" class="form-control" data-query=".child-task.completed" data-change="background-color"> 
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Terminated Task Color:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="color" value="#ff0000" class="form-control" data-query=".child-task.terminated" data-change="background-color"> 
+						</div>
 					</div>
 
 					<div class="row">
@@ -329,8 +335,8 @@
 							<p>Font Size:</p>
 						</div>
 						<div class="col-lg-6 col-md-6">
-							<input type="color" value="#ff0000" id="color-picker" class="form-control" data-class="child-task.completed, child-task.terminated"> 
-							</div>
+							<input type="text" value="14" class="form-control" data-query="*" data-change="font-size"> 
+						</div>
 					</div>
 
 					<div class="mt10 pull-right">
@@ -338,9 +344,7 @@
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					</div>
 				</div>
-
 			</div>
-
 		</div>
 	</div>
 

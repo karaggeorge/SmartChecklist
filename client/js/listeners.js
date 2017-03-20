@@ -70,15 +70,12 @@ $("#set-colors").click(function(){
 	$.each(inputs, function(i, input){
 		input = $(input);
 
-		if(input.attr("data-id")){
-			$("#" + input.attr("data-id")).css("background-color", input.val());
-		}
-		else if(input.attr("data-class")){
-			var classes = input.attr("data-class").split(",");
-			$.each(classes, function(j, theClass){
-				$("." + theClass.trim()).css("background-color", input.val());;
-			});
-		}
+		var query = input.attr("data-query");
+		var change = input.attr("data-change");
+		var value = input.val();
+
+		if(change == "font-size") value += "px";
+		if(query && change) $(query).css(change, value);
 	});
 });
 
