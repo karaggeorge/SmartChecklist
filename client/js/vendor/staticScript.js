@@ -31,7 +31,6 @@ function addParentTask(parentTaskId, task){
 	tree[task.pos].displayed = true;
 }
 
-//CHANGE_HERE (FUNCTION - I added bindNoteInfoButtons method call at the end)
 function manageNewTasks(tasks) {
 	const decodedTasks = [];
 	tasks.forEach(function(task) {
@@ -43,8 +42,6 @@ function manageNewTasks(tasks) {
 	});
 	addToTree(decodedTasks);
 	displayTasks();
-
-	bindNoteInfoButtons();
 }
 
 function displayTasks() {
@@ -224,61 +221,6 @@ function getDateTime(){
 	return dateObj;
 }
 
-//CHANGE_HERE (FUNCTION - There is an artifacts listener in this function - do we still need it?)
-function bindNoteInfoButtons(){
-
-	$(".info-button").click(function(){
-		var taskID = $(this).parent().parent().parent().parent().attr("id");
-
-		// Find the task in the tree
-		$.each(tree, function(i, task){
-			if(taskID == task.id){
-				$("#description-modal .modal-title").text(task.name);
-				if(task.description){
-					$("#description-text").text(task.description);
-				}
-				else{
-					$("#description-text").text("No description found");
-				}
-			}
-		});
-
-		$("#description-modal").modal("show");
-	});
-
-	$(".note-button").click(function(){
-		var taskID = $(this).parent().parent().parent().parent().attr("id");
-
-		$("#note-modal").attr("data-task", taskID);
-
-		// Find the task in the tree
-		$.each(tree, function(i, task){
-			if(taskID == task.id){
-				if(task.comments){
-					var list = $("<ul></ul>");
-
-					$.each(task.comments, function(j, comment){
-						list.append("<li>" + comment.note + " (" + comment.datetime.date + " " + comment.datetime.time + ")</li>");
-					});
-
-					$("#old-comments").html(list);
-					$("#note-input").val("");
-				}
-			}
-		});
-
-		$("#note-modal").modal("show");
-	});
-
-	$(".artifacts").click(function(){
-
-		var taskName = $(this).parent().parent().find(".task-title").text();
-
-		//Show the artifact modal
-		$("#artifact-modal").modal("show");
-	});
-}
-
 //Animate the vital information
 function simulateVitals(){
 	var increment = 1;
@@ -348,6 +290,76 @@ function generatePostDoc(){
 		table.hide();
 	});
 }
+
+
+$(document).on("click", ".info-button", function(){
+	var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+	// Find the task in the tree
+	$.each(tree, function(i, task){
+		if(taskID == task.id){
+			$("#description-modal .modal-title").text(task.name);
+			if(task.description){
+				$("#description-text").text(task.description);
+			}
+			else{
+				$("#description-text").text("No description found");
+			}
+		}
+	});
+
+	$("#description-modal").modal("show");
+});
+
+$(document).on("click", ".note-button", function(){
+	var taskID = $(this).parent().parent().parent().parent().attr("id");
+
+	$("#note-modal").attr("data-task", taskID);
+
+	// Find the task in the tree
+	$.each(tree, function(i, task){
+		if(taskID == task.id){
+			if(task.comments){
+				var list = $("<ul></ul>");
+
+				$.each(task.comments, function(j, comment){
+					list.append("<li>" + comment.note + " (" + comment.datetime.date + " " + comment.datetime.time + ")</li>");
+				});
+
+				$("#old-comments").html(list);
+				$("#note-input").val("");
+			}
+		}
+	});
+
+	$("#note-modal").modal("show");
+});
+
+$(document).on("click", ".artifacts", function(){
+
+	var taskName = $(this).parent().parent().find(".task-title").text();
+
+	//Show the artifact modal
+	$("#artifact-modal").modal("show");
+});
+
+$(document).on("click", ".edit-color", function(){
+	var parentID = $(this).attr("data-parent");
+
+	$("#color-picker-modal").attr("data-element", parentID);
+	$("#color-picker-modal").modal("show");
+});
+
+$('#color-picker-modal').on('hide.bs.modal', function(event) {
+	const modal = $(this);
+	var element = $("#color-picker-modal").attr("data-element");
+	var color = $("#color-picker").val();
+
+	console.log(element, color);
+
+	$("#" + element).css("background-color", color);
+});
+
 
 //Modals
 

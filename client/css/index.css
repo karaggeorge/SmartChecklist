@@ -1,3 +1,12 @@
+/* Header */
+#process-info{
+	background-color: #61B56E;	
+}
+
+#patient-info{
+	background-color: #CEC7C7;	
+}
+
 /* Process Tasks Section */
 .scroll-box {
 	font: 24px/36px sans-serif;
@@ -35,7 +44,7 @@
 	padding:0;
 	font-size: 14px;
 	margin-left: 10px;
-  font-style: italic;
+  	font-style: italic;
 }
 .child-task{
 	background-color: #78F586;
