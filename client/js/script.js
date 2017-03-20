@@ -1,5 +1,3 @@
-
-
 const taskExceptions = {};
 const taskIds = {};
 const map = {};
@@ -438,7 +436,7 @@ $("#save-note").on("click", function(){
 		if(taskID == task.id){
 			var dateTime = getDateTime();
 			task.comments.push({"note": note, "datetime": dateTime});
-			$("#" + taskID).find(".note-badge").text(task.comments.length);
+			$("#" + taskID).find(".note-badge").text(task.comments.length).show();
 		}
 	});
 
