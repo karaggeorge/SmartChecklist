@@ -8,8 +8,6 @@ connection.onerror = function (error) {
   console.log('WebSocketor ' + error);
 };
 connection.onmessage = function (e) {
-  //var textarea = document.getElementById("display");
-  //textarea.value = e.data;
   console.log('received message ' + e.data);
 	processLine(e.data);
 };

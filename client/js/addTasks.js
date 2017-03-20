@@ -36,10 +36,12 @@ function manageNewTasks(tasks) {
 	tasks.forEach(function(task) {
 		if(task) decodedTasks.push(decode(task));
 	});
-	console.log("New tasks we got ");
+	console.log("New tasks we received:");
+
 	decodedTasks.forEach(function(task) {
 		console.log(task);
 	});
+
 	addToTree(decodedTasks);
 	displayTasks();
 }
