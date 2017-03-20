@@ -2,7 +2,7 @@
  * Copyright (c) 2013, University of Massachusetts Amherst
  * All Rights Reserved.
  */
-package laser.bt.agents;
+package agents;
 
 import laser.juliette.agent.AbstractAgent;
 import laser.juliette.agent.ItemHandler;

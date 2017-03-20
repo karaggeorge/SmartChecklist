@@ -1,4 +1,4 @@
-package laser.bt.agents;
+package agents;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

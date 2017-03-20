@@ -1,4 +1,4 @@
-package laser.bt.agents;
+package agents;
 
 import laser.juliette.ams.AgendaItem;
 import java.util.ArrayList;
