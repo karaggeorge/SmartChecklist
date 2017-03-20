@@ -9,6 +9,8 @@ public class ServerControler {
   private ArrayList<Item> newItems;
   private MercutioServer mercutio;
   private boolean newItemsAvailable = false;
+  private boolean ended = false;
+  private String endCommand = "";
 
   public ServerControler(MercutioServer mercutio) {
     this.mercutio = mercutio;
@@ -79,6 +81,11 @@ public class ServerControler {
     return waitForNewItems();
   }
 
+  public void end(String command) {
+    this.ended = true;
+    this.endCommand = command;
+  }
+
   private String sendAllItems() {
     String message = "ITEMS ";
 
@@ -106,9 +113,9 @@ public class ServerControler {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    
+
     int count = 0;
-    while(!this.newItemsAvailable && count < 4) {
+    while(!this.newItemsAvailable && !this.ended && count < 4) {
       try {
         Thread.sleep(100);
         count++;
@@ -117,7 +124,8 @@ public class ServerControler {
       }
     }
 
-    return sendNewItems();
+    if(this.ended) return this.endCommand;
+    else return sendNewItems();
   }
 
 	private String sendError(String error) {

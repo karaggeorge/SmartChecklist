@@ -10,6 +10,7 @@ public class MercutioClient {
 	private String POST = "POST";
 	private String START = "START";
 	private String ERROR = "ERROR";
+	private String END = "END";
 
 	private PrintWriter out;
 	private BufferedReader in;
@@ -77,6 +78,11 @@ public class MercutioClient {
 
 	private void sendError(String error) {
 		sendMessage(this.ERROR, error);
+	}
+
+	public void end(boolean success) {
+		if(success) sendMessage(this.END, "true");
+		else sendMessage(this.END, "false");
 	}
 
 	private void shutDown() {
