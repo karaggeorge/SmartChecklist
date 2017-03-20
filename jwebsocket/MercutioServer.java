@@ -64,6 +64,8 @@ public class MercutioServer {
 			startProcess();
 		} else if(line.startsWith("POST ")) {
 			controler.postItem(line.substring(5));
+	  } else if(line.startsWith("END ")) {
+			controler.end(line);
 	  } else if(line.equals("EXIT")) {
 			shutDown();
 		} else if(line.startsWith("ERROR ")) {

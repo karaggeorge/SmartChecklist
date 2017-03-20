@@ -23,6 +23,7 @@ echo Process Installed
 echo Executing
 jul agent localhost laser.juliette.agent.DummyAgent auto&
 jul agent localhost SmartChecklistAgents.jar agents.Nurse n1&
+sleep 1
 jul run SimplifiedBloodTransfusionProcess-juld
 
 echo Finished Script
