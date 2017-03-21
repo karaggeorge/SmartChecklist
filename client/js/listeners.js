@@ -1,3 +1,18 @@
+//Retrieve all display settings from the cookie and reimplement them
+$(document).ready(function(){
+	//Make sure the cookie exists
+	if(getCookie("sc-settings")){
+
+		//Get the object array
+		var settings = JSON.parse(getCookie("sc-settings"));
+
+		//Implement each setting
+		$.each(settings, function(i, setting){
+			$(setting.query).css(setting.change, setting.value);
+		});
+	}
+});
+
 //Save a note to a task
 $("#save-note").on("click", function(){
 	// Get the id of the task adding note to
@@ -59,13 +74,15 @@ $(document).on("click", ".note-button", function(){
 	$("#note-modal").modal("show");
 });
 
-$(document).on("click", ".edit-color", function(){
+$(document).on("click", "#settings-btn", function(){
 	$("#color-picker-modal").modal("show");
 });
 
+//Retrieve the settings from the settings modal and change the element colors appropriately
 $("#set-colors").click(function(){
 	var modal = $('#color-picker-modal');
 	var inputs = modal.find("input");
+	var saveData = [];
 	
 	$.each(inputs, function(i, input){
 		input = $(input);
@@ -74,9 +91,17 @@ $("#set-colors").click(function(){
 		var change = input.attr("data-change");
 		var value = input.val();
 
+		saveData.push({
+			"query": query,
+			"change": change,
+			"value": value
+		});
+
 		if(change == "font-size") value += "px";
 		if(query && change) $(query).css(change, value);
 	});
+
+	setCookie("sc-settings", JSON.stringify(saveData), 1);
 });
 
 //Modals
@@ -103,13 +128,11 @@ $('#exception-modal').on('show.bs.modal', function(event) {
 		exceptionList.append(newException);
 	});
 });
-
 $('#exception-modal').on('hide.bs.modal', function(event) {
 	const modal = $(this);
 	modal.find('.modal-exception-list').empty().removeAttr('id');
 	modal.find('#modal-task').empty();
 });
-
 $('#exception-modal #terminate').on('click', function() {
 	const exceptionsThrown = [];
 	const modal = $('#exception-modal');

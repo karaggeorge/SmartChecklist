@@ -15,15 +15,18 @@
 			<div class="col-lg-4 col-md-4">
 				<h4 class="text-center">Smart Checklist</h4>
 			</div>
-			<div class="col-lg-3 col-md-3 col-lg-offset-1 col-md-offset-1 pull-right ">
+			<div class="col-lg-3 col-md-3 col-lg-offset-1 col-md-offset-1 pull-right">
 				<button onclick="generatePostDoc()" class="btn btn-primary">Post Documentation</button>
+
+				<button class="btn btn-default" id="settings-btn">
+					<span class="glyphicon glyphicon-cog"></span>
+				</button>
 			</div>
 		</div>
 	</header>
 
 	<!-- Patient info section with image and stats -->
 	<section id="patient-info" class="section">
-		<span class="glyphicon glyphicon-pencil pull-right edit-color" data-parent="patient-info"></span>
 		<div class="row">
 			<div class="col-lg-3 col-md-3">
 				<img src="img/blankPerson.png" alt="Patient Profile Picture" class="img-responsive">
@@ -55,9 +58,6 @@
 
 	<!-- Process title and status -->
 	<section id="process-info" class="section">
-
-		<span class="glyphicon glyphicon-pencil pull-right edit-color" data-parent="process-info"></span>
-
 		<div class="row mt10">
 			<div class="col-lg-8 col-md-8">
 				<h4 style="text-transform: uppercase;">Transfer one unit of packed red blood cells (PRBCS)</h4>
@@ -450,6 +450,7 @@
 
 	<script src="js/vendor/jsPDF.js"></script>
 	<script src="js/vendor/html2canvas.js"></script>
+	<script src="js/vendor/jquery.cookie.js"></script>
 
 	<script src="js/addTasks.js"></script>
 	<script src="js/helpers.js"></script>
