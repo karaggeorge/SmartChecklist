@@ -36,8 +36,9 @@ function processLine(req) {
 			alert(terminatedMessage);
 			$("#process-status").text("Terminated");
 		}
-	} 
-	else {
+	} else if(req.equals(" ")) {
+		console.log("Request Acknowledged");
+	} else {
 		console.error('Unknown Request: ' + req);
 	}
 }

@@ -5,7 +5,7 @@ function getDateTime(){
 	return date + " " + time;
 }
 
-function getDateTime(){
+function getasdDateTime(){
 	var dateObj = {};
 	var today = new Date();
 	dateObj["date"] = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();

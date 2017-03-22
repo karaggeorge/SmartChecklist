@@ -169,13 +169,16 @@ function decode(encodedTask) {
 		terminated: parts[1] == 4,
 		isLeaf: parts[2] == 1,
 		type: parts[2],
+		date: parts[4] != " " ? parts[4] : null,
 		parent: parts[3],
-		exceptions: parts[4] ? parts[4].split('||') : null,
+		exceptions: parts[5] ? parts[5].split('||') : null,
 		displayed: false,
-		description: parts[5] != " " ? parts[5] : null,
-		artifacts: parts[6] != " " ? decodeArtifacts(parts[6]) : [],
-		comments: [],
-		date: null
+		description: parts[6] != " " ? parts[6] : null,
+		artifacts: parts[7] != " " ? decodeArtifacts(parts[7]) : [],
+		comments: parts[8] != " " ? parts[8].split('||').map(function(comment) {
+			const parts = comment.split('#%#');
+			return {"note": parts[0], "datetime": parts[1]};
+		}) : [],
 	}
 }
 
@@ -191,6 +194,8 @@ function addLeafTask(parentTaskId, task){
 
 	newTask.find("h4").text(task.name);
 	newTask.attr('id', task.id);
+	newTask.find(".time").html(task.date ? task.date : " ");
+	if(task.comments.length) newTask.find(".note-badge").text(task.comments.length).show();
 
 	newTask.find('[data-toggle="popover"]').popover();
 	var artifactString = "";
@@ -208,11 +213,10 @@ function addLeafTask(parentTaskId, task){
 
 		newTask.find(".check-button").click(function () {
 			$(this).parents('.child-task').addClass('completed');
-			$(this).parent().parent().parent().parent().find(".time").html(getDateTime());
+			const date = getDateTime();
+			$(this).parents('.child-task').find(".time").html(date);
 
-			tree[task.pos].date = getDateTime();
-
-			sendMessage("COMPLETE " + task.name);
+			sendMessage("COMPLETE " + task.name + "#@#" + date);
 		});
 
 		if(!task.exceptions) {

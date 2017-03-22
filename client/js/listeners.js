@@ -24,6 +24,7 @@ $("#save-note").on("click", function(){
 		if(taskID == task.id){
 			var dateTime = getDateTime();
 			task.comments.push({"note": note, "datetime": dateTime});
+			sendMessage("COMMENT " + task.name + "#@#" + note + "#@#" + dateTime);
 			$("#" + taskID).find(".note-badge").text(task.comments.length).show();
 		}
 	});
@@ -62,7 +63,7 @@ $(document).on("click", ".note-button", function(){
 				var list = $("<ul></ul>");
 
 				$.each(task.comments, function(j, comment){
-					list.append("<li>" + comment.note + " (" + comment.datetime.date + " " + comment.datetime.time + ")</li>");
+					list.append("<li>" + comment.note + " (" + comment.datetime + ")</li>");
 				});
 
 				$("#old-comments").html(list);
@@ -83,7 +84,7 @@ $("#set-colors").click(function(){
 	var modal = $('#color-picker-modal');
 	var inputs = modal.find("input");
 	var saveData = [];
-	
+
 	$.each(inputs, function(i, input){
 		input = $(input);
 
@@ -148,9 +149,11 @@ $('#exception-modal #terminate').on('click', function() {
 	if(exceptionsThrown.length == 0) {
 		alert("You need to select at least one");
 	} else {
-		sendMessage("TERMINATE " + taskName + "#@#" + exceptionsThrown.join('||'));
+		const date = getDateTime();
+		sendMessage("TERMINATE " + taskName + "#@#" + exceptionsThrown.join('||') + "#@#" + date);
 		const taskElement = $('#'+taskIds[taskName]);
 		taskElement.addClass('terminated');
+		taskElement.find(".time").html(date);
 		modal.modal('hide');
 	}
 });

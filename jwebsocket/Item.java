@@ -7,6 +7,8 @@ public class Item {
   private String exceptions;
   private String description;
   private String artifacts;
+  private String date;
+  private String comments;
 
   public Item(String itemCode) {
     decode(itemCode);
@@ -26,6 +28,7 @@ public class Item {
     this.exceptions = parts[3];//.split("\\|\\|");
     this.description = parts[4];
     this.artifacts = parts[5];//.split("\\|\\|");
+    this.date = " ";
     System.out.println("My exceptions are " + getExceptions());
   }
 
@@ -36,15 +39,27 @@ public class Item {
   }
 
   public String encode() {
-    return this.name + "#@#" + this.status + "#@#" + this.isLeaf + "#@#" + this.parent + "#@#" + getExceptions() + "#@#" + this.description + "#@#" + this.artifacts;
+    return this.name + "#@#" + this.status + "#@#" + this.isLeaf + "#@#" + this.parent + "#@#" + this.date + "#@#" + getExceptions() + "#@#" + this.description + "#@#" + this.artifacts + "#@#" + getComments();
   }
 
-  public void complete() {
+  private String getComments() {
+    if(this.comments == null) return " ";
+    else return this.comments;
+  }
+
+  public void complete(String date) {
+    this.date = date;
     this.status = 3;
   }
 
-  public void terminate() {
+  public void terminate(String date) {
+    this.date = date;
     this.status = 4;
+  }
+
+  public void comment(String note, String date) {
+    if(this.comments == null) this.comments = note + "#%#" + date;
+    else this.comments += "||" + note + "#%#" + date;
   }
 
   public boolean done() {

@@ -43,7 +43,9 @@ public class ServerControler {
       return completeItem(line.substring(9));
     } else if(line.startsWith("TERMINATE ")) {
       return terminateItem(line.substring(10));
-    }else {
+    } else if(line.startsWith("COMMENT ")) {
+      return commentItem(line.substring(8));
+    } else {
 			return sendError("Command not recognized");
 		}
 	}
@@ -54,12 +56,15 @@ public class ServerControler {
     return sendAllItems();
 	}
 
-  private String completeItem(String itemName) {
+  private String completeItem(String itemCode) {
+    String [] parts = itemCode.split("#@#");
+    String itemName = parts[0];
+    String date = parts[1];
     System.out.println("Sending command to complete " + itemName);
     for(Item item : items) {
       if(item.getName().equals(itemName)) {
         if(!item.done()) {
-          item.complete();
+          item.complete(date);
           mercutio.completeItem(itemName);
         }
       }
@@ -67,13 +72,25 @@ public class ServerControler {
     return waitForNewItems();
   }
 
+  private String commentItem(String itemCode) {
+    String [] parts = itemCode.split("#@#");
+    String itemName = parts[0];
+    for(Item item : items) {
+      if(item.getName().equals(itemName)) {
+        item.comment(parts[1], parts[2]);
+      }
+    }
+    return " ";
+  }
+
   private String terminateItem(String terminateCode) {
-    String itemName = terminateCode.split("#@#")[0];
+    String [] parts = terminateCode.split("#@#");
+    String itemName = parts[0];
     System.out.println("Sending command to terminate " + itemName);
     for(Item item : items) {
       if(item.getName().equals(itemName)) {
         if(!item.done()) {
-          item.terminate();
+          item.terminate(parts[2]);
           mercutio.terminateItem(terminateCode);
         }
       }
