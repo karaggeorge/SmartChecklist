@@ -11,6 +11,9 @@ $(document).ready(function(){
 			$(setting.query).css(setting.change, setting.value);
 		});
 	}
+	else{
+		//set the color pickers to the default colors
+	}
 });
 
 //Save a note to a task
