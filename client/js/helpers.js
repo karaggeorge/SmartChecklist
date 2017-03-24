@@ -1,7 +1,7 @@
 function getDateTime(){
 	var today = new Date();
 	var date = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
-	var time = today.getHours() + ":" + today.getMinutes();
+	var time = today.getHours() + ":" + ("0" + today.getMinutes()).slice(-2);
 	return date + " " + time;
 }
 
@@ -45,6 +45,7 @@ function generatePostDoc(){
 
 	for(var i = 0; i < tree.length; i++){
 		var task = tree[i];
+		if(!task.isLeaf) continue;
 		var comments = "";
 
 		for(var j = 0; j < task.comments.length; j++){
@@ -56,8 +57,7 @@ function generatePostDoc(){
 		var html = "<tr>";
 
 		html = html + "<td>" + task.name + "</td>";
-		html = html + "<td>" + task.date.date + "</td>";
-		html = html + "<td>" + task.date.time + "</td>";
+		html = html + "<td>" + task.date + "</td>";
 		html = html + "<td>98</td>";
 		html = html + "<td>27.5</td>";
 		html = html + "<td>98%</td>";
