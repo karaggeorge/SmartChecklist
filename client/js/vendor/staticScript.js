@@ -1,2 +1,28 @@
-const staticSteps = "confirm existence of blood type and screen#@#1#@#1#@#obtain patient's blood type#@#patient blood type unavailable#@#Ensure the blood type is known|%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@#|%|perform blood transfusion process#@#1#@#2#@#none#@#failed product check||wrong patient|%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#|%|identify patient#@#3#@#1#@#perform bedside checks#@#wrong patient|%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@#failed product check||wrong patient|%|check product info match patient info#@#3#@#1#@#check blood product#@#failed product check|%|check expiration date#@#3#@#1#@#check blood product#@#failed product check|%|check blood product#@#1#@#3#@#perform bedside checks#@#failed product check|%|infuse blood#@#3#@#1#@#perform blood transfusion process#@#|%|";
-manageNewTasks(staticSteps.split('|%|'));
+tree.push({
+	id: "task-id-1",
+	name: "Test Task",
+	completed: false,
+	terminated: false,
+	isLeaf: false,
+	type: "test",
+	date: Date.now,
+	parentId: {
+		id: -1,
+		displayed: false,
+		pos: 0
+	},
+	exceptions: [
+		"Test exception"
+	],
+	displayed: false,
+	description: "This is the description",
+	artifacts: ["Artifact 1", "Artifact 2"],
+	comments: [
+		{
+			"note": "TEST",
+			"datetime": Date.now
+		}
+	]
+});
+
+displayTask(0);
