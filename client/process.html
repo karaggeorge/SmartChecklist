@@ -3,6 +3,7 @@
 <head>
 	<title>Smart Checklists | Blood Transfusion Process</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-colorpicker.css">
 	<link rel="stylesheet" href="css/index.css">
 </head>
 <body class="container">
@@ -280,8 +281,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Patient Info Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#CEC7C7" class="form-control" data-query="#patient-info" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#CEC7C7" data-query="#patient-info" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -289,8 +292,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Process Info Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#61B56E" class="form-control" data-query="#process-info" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#61B56E" data-query="#process-info" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -298,8 +303,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Active Parent Task Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#78F586" class="form-control" data-query=".parent-task" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#78F586" data-query=".parent-task" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -307,8 +314,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Active Child Task Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#78F586" class="form-control" data-query=".child-task" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#78F586" data-query=".child-task" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -316,8 +325,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Completed Task Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#EEEEEE" class="form-control" data-query=".child-task.completed" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#EEEEEE" data-query=".child-task.completed" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -325,8 +336,10 @@
 					<div class="col-lg-6 col-md-6">
 						<p>Terminated Task Color:</p>
 					</div>
-					<div class="col-lg-6 col-md-6">
-						<input type="color" value="#EEEEEE" class="form-control" data-query=".child-task.terminated" data-change="background-color">
+
+					<div class="input-group colorpicker-component">
+						<input type="text" value="#EEEEEE" data-query=".child-task.terminated" data-change="background-color"/>
+					  <span class="input-group-addon"><i></i></span>
 					</div>
 				</div>
 
@@ -451,9 +464,15 @@
 <script src="js/vendor/jsPDF.js"></script>
 <script src="js/vendor/html2canvas.js"></script>
 
+<script src="js/colorpicker-color.js"></script>
+<script src="js/colorpicker-component.js"></script>
+<script src="js/colorpicker-defaults.js"></script>
+<script src="js/colorpicker-plugin-wrapper.js"></script>
+
 <script src="js/addTasks.js"></script>
 <script src="js/helpers.js"></script>
 <script src="js/listeners.js"></script>
 <script src="js/websocket.js"></script>
+
 </body>
 </html>

@@ -1,10 +1,23 @@
 /* Header */
 #process-info{
-	background-color: #61B56E;	
+	background-color: #61B56E;
 }
 
 #patient-info{
-	background-color: #CEC7C7;	
+	background-color: #CEC7C7;
+}
+
+.input-group-addon {
+	width: 0px;
+	padding: 0;
+}
+
+.colorpicker-component {
+	margin: auto;
+}
+
+.colorpicker-component input {
+	display: none;
 }
 
 /* Process Tasks Section */

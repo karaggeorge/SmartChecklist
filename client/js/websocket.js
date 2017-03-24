@@ -1,5 +1,7 @@
 var connection = new WebSocket('ws://localhost:8787', 'json');
 
+$('.colorpicker-component').colorpicker();
+
 connection.onopen = function () {
 	console.log('Connected');
 	sendMessage("START");
