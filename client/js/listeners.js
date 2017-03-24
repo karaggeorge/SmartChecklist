@@ -1,3 +1,5 @@
+$('.colorpicker-component').colorpicker();
+
 //Retrieve all display settings from the cookie and reimplement them
 $(document).ready(function(){
 	//Make sure the cookie exists
