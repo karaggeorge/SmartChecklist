@@ -7,12 +7,12 @@ public class ServerControler {
 
   private ArrayList<Item> items;
   private ArrayList<Item> newItems;
-  private MercutioServer mercutio;
+  private MercutioInstance mercutio;
   private boolean newItemsAvailable = false;
   private boolean ended = false;
   private String endCommand = "";
 
-  public ServerControler(MercutioServer mercutio) {
+  public ServerControler(MercutioInstance mercutio) {
     this.mercutio = mercutio;
     this.items = new ArrayList<Item> ();
     this.newItems = new ArrayList<Item> ();
