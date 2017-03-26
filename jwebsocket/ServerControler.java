@@ -5,17 +5,36 @@ public class ServerControler {
 
   private String ERROR = "ERROR";
 
+  private String agentName;
   private ArrayList<Item> items;
   private ArrayList<Item> newItems;
   private MercutioInstance mercutio;
   private boolean newItemsAvailable = false;
   private boolean ended = false;
   private String endCommand = "";
+  private boolean waiting = false;
+  private String processId;
 
   public ServerControler(MercutioInstance mercutio) {
     this.mercutio = mercutio;
     this.items = new ArrayList<Item> ();
     this.newItems = new ArrayList<Item> ();
+  }
+
+  public void setAgentName(String name) {
+    this.agentName = name;
+  }
+
+  public void setProcessId(String id) {
+    this.processId = id;
+  }
+
+  public String getAgentName() {
+    return this.agentName;
+  }
+
+  public boolean checkAgentName(String name) {
+    return this.agentName.equals(name);
   }
 
   public void postItem(String itemCode) {
@@ -53,7 +72,8 @@ public class ServerControler {
 	private String startProcess() {
     newItems.clear();
     this.newItemsAvailable = false;
-    return sendAllItems();
+    if(this.items.isEmpty()) return waitForNewItems();
+    else return sendAllItems();
 	}
 
   private String completeItem(String itemCode) {
@@ -69,6 +89,10 @@ public class ServerControler {
         }
       }
     }
+    return waitForNewItems();
+  }
+
+  public String initiateProcess() {
     return waitForNewItems();
   }
 
@@ -104,7 +128,7 @@ public class ServerControler {
   }
 
   private String sendAllItems() {
-    String message = "ITEMS ";
+    String message = "ITEMS " + this.processId + " ";
 
     for(Item item : items) {
         message += item.encode() + "|%|";
@@ -114,7 +138,7 @@ public class ServerControler {
   }
 
   private String sendNewItems() {
-    String message = "ITEMS ";
+    String message = "ITEMS " + this.processId + " ";
 
     for(Item item : newItems) {
         message += item.encode() + "|%|";
@@ -125,22 +149,28 @@ public class ServerControler {
   }
 
   private String waitForNewItems() {
+    if(this.waiting) return " ";
+    this.waiting = true;
     try {
       Thread.sleep(500);
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    int count = 0;
-    while(!this.newItemsAvailable && !this.ended && count < 4) {
+    while(!this.newItemsAvailable && !this.ended) {
       try {
         Thread.sleep(100);
-        count++;
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
 
+    try {
+      Thread.sleep(300);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    this.waiting = false;
     if(this.ended) return this.endCommand;
     else return sendNewItems();
   }

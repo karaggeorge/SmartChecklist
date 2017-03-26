@@ -68,7 +68,7 @@ public class Listener implements WebSocketServerListener {
 
 	@Override
 	public void processOpened(WebSocketServerEvent event) {
-		System.out.println(" ----- Connectioned ----- ");
+		System.out.println(" ----- Connectioned -----  with " + event.getSessionId());
 		hub.addConnection(event.getSessionId());
 	}
 

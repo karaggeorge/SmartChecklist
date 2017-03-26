@@ -1,9 +1,22 @@
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.List;
+import java.util.Arrays;
+
 public class MercutioInstance extends Thread {
+
+	private String ERROR = "ERROR";
+	private String COMPLETE = "COMPLETE";
+	private String TERMINATE = "TERMINATE";
 
   private PrintWriter out;
   private BufferedReader in;
   private ServerControler controler;
+  private Socket socket;
   private boolean done = false;
   private boolean connected = false;
 
@@ -15,18 +28,22 @@ public class MercutioInstance extends Thread {
 
   public void run() {
     try {
-      out = new PrintWriter(socket.getOutputStream(), true);
-      in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      try {
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-      out.println("CONNECTED");
-      while(!done) {
-        String line = in.readLine();
-        processLine(line);
+        out.println("CONNECTED");
+        while(!done) {
+          String line = in.readLine();
+          processLine(line);
+        }
+      } catch(IOException e) {
+        System.out.println(e.getMessage());
+      } finally {
+        socket.close();
       }
-    } catch(IOException e) {
-      System.out.println(e.getMessage());
-    } finally {
-      socket.close();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

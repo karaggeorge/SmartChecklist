@@ -2,12 +2,6 @@
 jul stop
 
 cd ..
-javac agents/*.java
-echo Compiled
-
-jar cf SmartChecklistAgents.jar -C . agents/
-mv -f SmartChecklistAgents.jar juls-and-scripts/SmartChecklistAgents.jar
-echo Built
 
 cd juls-and-scripts
 cp SimplifiedBloodTransfusionProcess-juld.jul processJulInJar.jar
