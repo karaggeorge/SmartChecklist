@@ -20,45 +20,6 @@ public class Listener implements WebSocketServerListener {
 		this.mercutio = new MercutioServer(9090);
 		mercutio.run();
 		this.hub = new ProcessHub(mercutio);
-
-		// mercutio.setControler(controler);
-		//
-		// Thread t = new Thread(new Runnable() {
-		// 		public void run() {
-		// 			mercutio.run();
-		// 		}
-		// });
-		// t.start();
-		//
-		// Thread th = new Thread(new Runnable() {
-		// 		public void run() {
-		// 			try {
-		// 				String path = System.getProperty("user.dir");
-		// 				String relativePath = "/../juls-and-scripts";
-		// 				path += relativePath;
-		// 				path += "/runProcess-juld.sh";
-		// 				Process p = Runtime.getRuntime().exec(path);
-		// 				System.out.println("Initiating Juliette");
-		//
-		// 				BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		// 		    String line;
-		// 		    while ((line = in.readLine()) != null) {
-		// 		        System.out.println(line);
-		// 		    }
-		// 		    p.waitFor();
-		// 		    System.out.println("Finished");
-		//
-		// 		    in.close();
-		//
-		// 			} catch (IOException e) {
-		// 				e.printStackTrace();
-		// 			} catch (Exception e) {
-		// 				e.printStackTrace();
-		// 			}
-		// 		}
-		// });
-		// th.start();
-
 	}
 
 	@Override

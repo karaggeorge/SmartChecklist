@@ -188,6 +188,11 @@ public class JulietteInitiator {
       result.add(this.controler);
     }
 
+    executeCommands(new String [] {
+      "sleep 2",
+      "jul run currentJul"
+    });
+
     return result;
   }
 

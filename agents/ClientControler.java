@@ -62,12 +62,10 @@ public class ClientControler {
         public void started(AgendaItemEvent event) { }
 
         public void completed(AgendaItemEvent event) {
-          System.out.println("DONE. COMPLETED. <----------------------------");
           mercutio.end(true);
         }
 
         public void terminated(AgendaItemEvent event) {
-          System.out.println("DONE. TERMINATED. <----------------------------");
           mercutio.end(false);
         }
       });
@@ -124,7 +122,6 @@ public class ClientControler {
 				Class currentExceptionsThrownClass = Class.forName(fullyQualifiedExceptionName);
 				Serializable currentExceptionThrownInst = (Serializable)currentExceptionsThrownClass.newInstance();
 				exceptionsThrown.add(currentExceptionThrownInst);
-				System.out.println("\tIs throwing exception " + currentExceptionThrownInst.getClass().getName());
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -381,7 +378,6 @@ public class ClientControler {
   private static String getFullyQualifiedName(String humanReadableName) {
     for (int i = 0; i < installedExceptionDecls.size(); i++) {
       if(createHumanReadableName(installedExceptionDecls.get(i)).equals(humanReadableName)) {
-        System.out.println("FOUND " + installedExceptionDecls.get(i));
         return installedExceptionDecls.get(i);
       }
     }
