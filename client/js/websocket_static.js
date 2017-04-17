@@ -1,18 +1,14 @@
-var connection = new WebSocket('ws://10.111.130.78:8787', 'json');
-
 $("form").submit(function(e) {
     e.preventDefault();
 });
 
-function connect(id) {
-	$('#process-id').val('');
-	$('#connect-error').hide();
-	sendMessage("CONNECT " + id);
-}
+const completedMessage = "The process was completed successfully!";
+const terminatedMessage = "The process was terminated";
 
-function initiate() {
-	sendMessage("INITIATE");
-}
+processLine("STARTED 75617");
+processLine(`ITEMS 75617 confirm existence of blood type and screen#@#3#@#1#@#obtain patient's blood type#@#4/17/2017 10:40#@#patient blood type unavailable#@#desc1#@#typeAndScreen#%#OUT#%#laser.bt.artifacts.BloodTypeAndScreen#@# |%|obtain patient's blood type#@#1#@#0#@#perform blood transfusion process#@# #@##@# #@#typeAndScreen#%#OUT#%#laser.bt.artifacts.BloodTypeAndScreen#@# |%|perform blood transfusion process#@#1#@#2#@#none#@# #@#failed product check||wrong patient#@# #@# #@# |%|pick up blood from blood bank#@#3#@#1#@#perform blood transfusion process#@#4/17/2017 10:40#@##@# #@#typeAndScreen#%#IN#%#laser.bt.artifacts.BloodTypeAndScreen||bloodProduct#%#OUT#%#laser.bt.artifacts.BloodProduct#@# |%|identify patient#@#3#@#1#@#perform bedside checks#@#4/17/2017 10:40#@#wrong patient#@# #@# #@# |%|perform bedside checks#@#1#@#2#@#perform blood transfusion process#@# #@#failed product check||wrong patient#@# #@#bloodProduct#%#IN#%#laser.bt.artifacts.BloodProduct#@# |%|check product info match patient info#@#3#@#1#@#check blood product#@#4/17/2017 10:40#@#failed product check#@# #@#bloodProduct#%#IN#%#laser.bt.artifacts.BloodProduct#@# |%|check expiration date#@#1#@#1#@#check blood product#@# #@#failed product check#@# #@#bloodProduct#%#IN#%#laser.bt.artifacts.BloodProduct#@# |%|check blood product#@#1#@#3#@#perform bedside checks#@# #@#failed product check#@# #@#bloodProduct#%#IN#%#laser.bt.artifacts.BloodProduct#@# |%|`);
+
+pickMainPage();
 
 function listProcess(p) {
 	console.log('called');
@@ -31,7 +27,6 @@ function listProcess(p) {
 		list.append(newItem);
 	});
 }
-
 function listAgents(a) {
 	pickIntroPage('agents');
 	const list = $('#agent-list');
@@ -48,54 +43,26 @@ function listAgents(a) {
 		list.append(newItem);
 	});
 }
-
 function pickIntroPage(page) {
 	$('.main-page').hide();
 	$('.intro').show();
 	$('.intro-container').hide();
 	$(`.intro-${page}`).show();
 }
-
 function pickMainPage() {
 	$('.main-page').show();
 	$('.intro').hide();
 }
-
-pickMainPage();
-
-connection.onopen = function () {
-	console.log('Connected');
-	// pickIntroPage('start');
-	sendMessage('CHECK');
-	// sendMessage("INITIATE");
-	// setTimeout(function () {
-	//
-	// }, 1000);
-};
-connection.onerror = function (error) {
-	console.log('WebSocket: ' + error);
-};
-connection.onmessage = function (e) {
-	console.log('Received Message: ' + e.data);
-	processLine(e.data);
-};
-
 function sendMessage(msg){
 	console.log('Sending Message: ' + msg);
 	connection.send(msg);
 }
-
 function setProcessId(id) {
 	$('#cur-process-id').html(id);
 }
-
 function setAgent(agent) {
 	$('#cur-agent').html(agent);
 }
-
-const completedMessage = "The process was completed successfully!";
-const terminatedMessage = "The process was terminated";
-
 function processLine(req) {
 	if(req.startsWith('ERR ')) {
 		handleError(req.substring(4));
@@ -103,8 +70,6 @@ function processLine(req) {
 		pickIntroPage('start');
 	} else if(req.startsWith('STARTED ')) {
 		pickMainPage();
-		setProcessId(req.substring(8));
-		sendMessage('PULL');
 	} else if(req == 'INITIATED') {
 		sendMessage('LIST');
 	} else if (req.startsWith('LIST ')) {
@@ -136,7 +101,6 @@ function processLine(req) {
 		console.error('Unknown Request: ' + req);
 	}
 }
-
 function handleError(error) {
 	if(error == 'Process not found') {
 		$('#connect-error').html('There is no process associated with that ID#').show();

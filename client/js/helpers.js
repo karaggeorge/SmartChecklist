@@ -4,7 +4,6 @@ function getDateTime(){
 	var time = today.getHours() + ":" + ("0" + today.getMinutes()).slice(-2);
 	return date + " " + time;
 }
-
 function getDateTimeObject(){
 	var dateObj = {};
 	var today = new Date();
@@ -12,7 +11,6 @@ function getDateTimeObject(){
 	dateObj["time"] = today.getHours() + ":" + today.getMinutes();
 	return dateObj;
 }
-
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -28,14 +26,12 @@ function getCookie(cname) {
     }
     return "";
 }
-
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
-
 function generatePostDoc(){
 	var table = $("#post-documentation-table");
 	var tableBody = $("#post-documentation-table tbody");
@@ -83,4 +79,28 @@ function generatePostDoc(){
 
 		table.hide();
 	});
+}
+function revertToDefaultColors(){
+
+	var defaultColorSettings = [
+		{value: "#CEC7C7", change: "background-color", query: "#patient-info"},
+		{value: "#61B56E", change: "background-color", query: "#process-info"},
+		{value: "#78F586", change: "background-color", query: ".parent-task"},
+		{value: "#78F586", change: "background-color", query: ".child-task"},
+		{value: "#EEEEEE", change: "background-color", query: ".child-task.completed"},
+		{value: "#EEEEEE", change: "background-color", query: ".child-task.terminated"},
+		{value: "16", change: "font-size", query: "*"}
+	];
+
+	//Implement each setting
+	$.each(defaultColorSettings, function(i, setting){
+		$(setting.query).css(setting.change, setting.value);
+		$("input[data-query='" + setting.query + "']").val(setting.value);
+
+		if(setting.change == "background-color"){
+			$("input[data-query='" + setting.query + "']").parent().colorpicker('setValue', setting.value)
+		}
+	});
+
+	$('.colorpicker-component').colorpicker('update');
 }

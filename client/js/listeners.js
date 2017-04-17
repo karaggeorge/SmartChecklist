@@ -11,11 +11,46 @@ $(document).ready(function(){
 		//Implement each setting
 		$.each(settings, function(i, setting){
 			$(setting.query).css(setting.change, setting.value);
+			$("[data-query='" + setting.query + "']").setColor(setting.value);
+
+			if(setting.change == "background-color"){
+				$("input[data-query='" + setting.query + "']").parent().colorpicker('setValue', setting.value)
+			}
 		});
 	}
 	else{
-		//set the color pickers to the default colors
+		revertToDefaultColors();
 	}
+});
+
+$("#colors-to-default").on("click", function(){
+	revertToDefaultColors();
+});
+
+//Retrieve the settings from the settings modal and change the element colors appropriately
+$("#set-colors").click(function(){
+	var modal = $('#color-picker-modal');
+	var inputs = modal.find("input");
+	var saveData = [];
+
+	$.each(inputs, function(i, input){
+		input = $(input);
+
+		var query = input.attr("data-query");
+		var change = input.attr("data-change");
+		var value = input.val();
+
+		saveData.push({
+			"query": query,
+			"change": change,
+			"value": value
+		});
+
+		if(change == "font-size") value += "px";
+		if(query && change) $(query).css(change, value);
+	});
+
+	setCookie("sc-settings", JSON.stringify(saveData), 1);
 });
 
 //Save a note to a task
@@ -84,30 +119,17 @@ $(document).on("click", "#settings-btn", function(){
 	$("#color-picker-modal").modal("show");
 });
 
-//Retrieve the settings from the settings modal and change the element colors appropriately
-$("#set-colors").click(function(){
-	var modal = $('#color-picker-modal');
-	var inputs = modal.find("input");
-	var saveData = [];
+$(document).on("click", ".parent-chevron", function(){
+	var childTasks = $(this).parent().next();
 
-	$.each(inputs, function(i, input){
-		input = $(input);
-
-		var query = input.attr("data-query");
-		var change = input.attr("data-change");
-		var value = input.val();
-
-		saveData.push({
-			"query": query,
-			"change": change,
-			"value": value
-		});
-
-		if(change == "font-size") value += "px";
-		if(query && change) $(query).css(change, value);
-	});
-
-	setCookie("sc-settings", JSON.stringify(saveData), 1);
+	if(childTasks.is(":visible")){
+		childTasks.slideUp(500);
+		$(this).removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+	}
+	else{
+		childTasks.slideDown(500);
+		$(this).removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+	}
 });
 
 //Modals
