@@ -1,4 +1,5 @@
 $('.colorpicker-component').colorpicker();
+$("[data-toggle=tooltip]").tooltip();
 
 //Retrieve all display settings from the cookie and reimplement them
 $(document).ready(function(){
@@ -179,6 +180,10 @@ $('#exception-modal #terminate').on('click', function() {
 		const date = getDateTime();
 		sendMessage("TERMINATE " + taskName + "#@#" + exceptionsThrown.join('||') + "#@#" + date);
 		const taskElement = $('#'+taskIds[taskName]);
+
+		taskElement.find(".failed").attr("data-toggle", "tooltip");
+		taskElement.find(".failed").attr("title", exceptionsThrown.join(","));
+		$('[data-toggle="tooltip"]').tooltip(); 
 		taskElement.addClass('terminated');
 		taskElement.find(".time").html(date);
 		modal.modal('hide');
