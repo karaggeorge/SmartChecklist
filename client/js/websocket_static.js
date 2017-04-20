@@ -88,11 +88,11 @@ function processLine(req) {
 		var completed = req.substring(4) === "true";
 
 		if(completed){
-			alert(completedMessage);
+			showModal("completed-modal", "<h4>Process Finished</h4>", completedMessage, "<button class='btn btn-default' data-dismiss='modal'>Close</button>");
 			$("#process-status").text("Completed");
 		}
 		else{
-			alert(terminatedMessage);
+			showModal("completed-modal", "<h4>Process Finished</h4>", terminatedMessage, "<button class='btn btn-default' data-dismiss='modal'>Close</button>");
 			$("#process-status").text("Terminated");
 		}
 	} else if(req == " ") {
