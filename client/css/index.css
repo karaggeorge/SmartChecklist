@@ -3,6 +3,38 @@
 	background-color: #61B56E;
 }
 
+.time{
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.mb40{
+	margin-bottom: 40px;
+}
+
+.relative{
+	position: relative;
+}
+
+.block{
+	display: block;
+}
+
+.uppercase{
+	text-transform: uppercase;
+}
+
+#post-documentation-table{
+	display:none;
+	width: 1100px;
+}
+
+.parent-chevron{
+	position: absolute;
+	right:0;
+	top:0
+}
+
 #patient-info{
 	background-color: #CEC7C7;
 }

@@ -10,7 +10,7 @@
 
 	<div class="intro">
 		<div class="intro-container intro-start">
-			<h2 style="margin-bottom: 40px">Welcome to SmartChecklist</h2>
+			<h2 class="mb40">Welcome to SmartChecklist</h2>
 			<form class="form-horizontal">
 				<div class="form-group">
 					<p id="connect-error"></p>
@@ -32,19 +32,19 @@
 		</div>
 
 		<div class="intro-container intro-process">
-			<h2 style="margin-bottom: 40px">Select a process</h2>
+			<h2 class="mb40">Select a process</h2>
 			<ul class="list-group" id="process-list">
 			</ul>
 		</div>
 
 		<div class="intro-container intro-agents">
-			<h2 style="margin-bottom: 40px">Select an agent</h2>
+			<h2 class="mb40">Select an agent</h2>
 			<ul class="list-group" id="agent-list">
 			</ul>
 		</div>
 
-		<div class="intro-container intro-loading" style="display:block">
-			<h2 style="margin-bottom: 40px">Loading ...</h2>
+		<div class="intro-container intro-loading block">
+			<h2 class="mb40">Loading ...</h2>
 		</div>
 	</div>
 
@@ -117,7 +117,7 @@
 	<section id="process-info" class="section">
 		<div class="row mt10">
 			<div class="col-lg-8 col-md-8">
-				<h4 style="text-transform: uppercase;">Transfer one unit of packed red blood cells (PRBCS)</h4>
+				<h4 class="uppercase">Transfer one unit of packed red blood cells (PRBCS)</h4>
 			</div>
 			<div class="col-lg-3 col-md-3">
 				<h4><i id="process-status">In-progress</i></h4>
@@ -425,12 +425,12 @@
 	<!-- Template Parent Task -->
 	<div id="template-task" style="display: none">
 		<div align="center" class="task-wrap">
-			<div class="parent-task" style="position: relative;">
+			<div class="parent-task relative">
 
 				<h3 class="parent-task-title"></h3>
 				<p class="parent-task-sub"></p>
 
-				<span class="glyphicon glyphicon-chevron-up parent-chevron" style="position: absolute;right:0;top:0"></span>
+				<span class="glyphicon glyphicon-chevron-up parent-chevron"></span>
 			</div>
 
 			<div class="container child-tasks">
@@ -448,7 +448,7 @@
 
 				<div class="col-lg-6">
 
-					<div class="time col-lg-3" style="font-size: 12px;line-height: 1.5;"></div>
+					<div class="time col-lg-3"></div>
 
 					<div class="current col-lg-2">
 						<div class="row">
@@ -471,7 +471,7 @@
 						</div>
 					</div>
 
-					<div class="col-lg-1 col-lg-offset-2" style="position: relative;">
+					<div class="col-lg-1 col-lg-offset-2 relative">
 						<img src="img/note.png" class="note-button">
 						<span class="label label-danger label-as-badge note-badge" style="display: none">0</span>
 					</div>
@@ -488,7 +488,7 @@
 	</div>
 
 	<!-- Hidden table to be used to export the post documentation -->
-	<div class="container" id="post-documentation-table" style="display:none;width: 1100px">
+	<div class="container" id="post-documentation-table">
 		<h1>Transfuse One Unit of Packed Red Blood Cells (PRBCs)</h1>
 		<p>Last Updated: <span class="updated">Fri Jun 24 17:25:39 EDT 2016</span>; Created: <span class="created">Fri Jun 24 17:25:03 EDT 2016</span></p>
 

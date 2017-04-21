@@ -19,13 +19,11 @@ $(document).ready(function(){
 			}
 		});
 	}
-	else{
-		revertToDefaultColors();
-	}
 });
 
 $("#colors-to-default").on("click", function(){
 	revertToDefaultColors();
+	$('#color-picker-modal').modal("hide");
 });
 
 //Retrieve the settings from the settings modal and change the element colors appropriately

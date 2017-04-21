@@ -83,18 +83,18 @@ function generatePostDoc(){
 function revertToDefaultColors(){
 
 	var defaultColorSettings = [
-	{value: "#CEC7C7", change: "background-color", query: "#patient-info"},
-	{value: "#61B56E", change: "background-color", query: "#process-info"},
-	{value: "#78F586", change: "background-color", query: ".parent-task"},
-	{value: "#78F586", change: "background-color", query: ".child-task"},
-	{value: "#EEEEEE", change: "background-color", query: ".child-task.completed"},
-	{value: "#EEEEEE", change: "background-color", query: ".child-task.terminated"},
-	{value: "16", change: "font-size", query: "*"}
+		{value: "#CEC7C7", change: "background-color", query: "#patient-info"},
+		{value: "#61B56E", change: "background-color", query: "#process-info"},
+		{value: "#78F586", change: "background-color", query: ".parent-task"},
+		{value: "#78F586", change: "background-color", query: ".child-task"},
+		{value: "#EEEEEE", change: "background-color", query: ".child-task.completed"},
+		{value: "#EEEEEE", change: "background-color", query: ".child-task.terminated"},
+		{value: "16", change: "font-size", query: "*"}
 	];
 
 	//Implement each setting
 	$.each(defaultColorSettings, function(i, setting){
-		$(setting.query).css(setting.change, setting.value);
+		$(setting.query).css(setting.change, "");
 		$("input[data-query='" + setting.query + "']").val(setting.value);
 
 		if(setting.change == "background-color"){
