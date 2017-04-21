@@ -1,4 +1,4 @@
-var connection = new WebSocket('ws://10.111.130.78:8787', 'json');
+var connection = new WebSocket('ws://localhost:8787', 'json');
 
 $("form").submit(function(e) {
     e.preventDefault();
