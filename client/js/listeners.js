@@ -1,4 +1,7 @@
+//Initialize the color picker used in the settings menu
 $('.colorpicker-component').colorpicker();
+
+//Initialize all Bootstrap tooltips (used for the exception hover)
 $("[data-toggle=tooltip]").tooltip();
 
 //Retrieve all display settings from the cookie and reimplement them
@@ -21,6 +24,7 @@ $(document).ready(function(){
 	}
 });
 
+//Revert the settings to the defaults
 $("#colors-to-default").on("click", function(){
 	revertToDefaultColors();
 	$('#color-picker-modal').modal("hide");
@@ -71,6 +75,7 @@ $("#save-note").on("click", function(){
 	$("#note-input").val("");
 });
 
+//Show the task description when the info button is clicked
 $(document).on("click", ".info-button", function(){
 	var taskID = $(this).parent().parent().parent().parent().attr("id");
 
@@ -90,6 +95,7 @@ $(document).on("click", ".info-button", function(){
 	$("#description-modal").modal("show");
 });
 
+//Open the note modal when the note icon is clicked
 $(document).on("click", ".note-button", function(){
 	var taskID = $(this).parent().parent().parent().parent().attr("id");
 
@@ -114,10 +120,12 @@ $(document).on("click", ".note-button", function(){
 	$("#note-modal").modal("show");
 });
 
+//Open the settings menu when the settings icon is clicked
 $(document).on("click", "#settings-btn", function(){
 	$("#color-picker-modal").modal("show");
 });
 
+//Collapse the current child tasks when the chevron icon is clicked on a parent task
 $(document).on("click", ".parent-chevron", function(){
 	var childTasks = $(this).parent().next();
 
@@ -131,8 +139,7 @@ $(document).on("click", ".parent-chevron", function(){
 	}
 });
 
-//Modals
-
+//When the exception modal is shown
 $('#exception-modal').on('show.bs.modal', function(event) {
 	const button = $(event.relatedTarget);
 	const taskId = button.attr('id');
@@ -155,6 +162,7 @@ $('#exception-modal').on('show.bs.modal', function(event) {
 		exceptionList.append(newException);
 	});
 });
+//When the exception modal is hidden
 $('#exception-modal').on('hide.bs.modal', function(event) {
 	const modal = $(this);
 	modal.find('.modal-exception-list').empty().removeAttr('id');

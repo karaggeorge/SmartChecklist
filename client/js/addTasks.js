@@ -4,12 +4,14 @@ const map = {};
 var taskNum = 0;
 const tree = [];
 
+//Object containing the description for different task types
 const TYPES = {
 	2: "Perform all of these in their specific order",
 	3: "Perform all of these in any order",
 	4: "Perform one of these",
 };
 
+//Given a task ID, reutrn the name associated with the task
 function getTaskNameById(id) {
 	var taskName;
 	Object.keys(taskIds).forEach((key) => {
@@ -22,7 +24,6 @@ function getTaskNameById(id) {
 function addParentTask(parentTaskId, task){
 	const newTask = $($("#template-task").html());
 	newTask.find(".parent-task-title").text(task.name);
-	//newTask.find(".parent-task-sub").text(subtitle);
 	if(TYPES[task.type]) {
 		newTask.find(".parent-task-sub").text(TYPES[task.type]);
 	}
@@ -31,6 +32,7 @@ function addParentTask(parentTaskId, task){
 	tree[task.pos].displayed = true;
 }
 
+//Add new tasks to the current list of tasks
 function manageNewTasks(tasks) {
 	const decodedTasks = [];
 	tasks.forEach(function(task) {
@@ -46,6 +48,7 @@ function manageNewTasks(tasks) {
 	displayTasks();
 }
 
+//Make sure all tasks are displayed in the tree
 function displayTasks() {
 	for(i = 0;i < tree.length;i++){
 		if(!tree[i].displayed) {
@@ -54,6 +57,7 @@ function displayTasks() {
 	}
 }
 
+//Display a specific task on the UI
 function displayTask(i) {
 	const task = tree[i];
 	if(task.parentId == -1 || task.displayed) return;
@@ -77,6 +81,7 @@ function displayTask(i) {
 	}
 }
 
+//Add a new tasks to the tree variable
 function addToTree(decodedTasks) {
 	for(mi = 0;mi < decodedTasks.length;mi++) {
 		console.log("Sending:");
@@ -85,6 +90,7 @@ function addToTree(decodedTasks) {
 	}
 }
 
+//Add an individual task to the tree variable
 function addTaskToTree(tasks, index) {
 	if(map[tasks[index].name] == null) {
 		console.log('Trying to add ' + tasks[index].name);
@@ -116,32 +122,8 @@ function addTaskToTree(tasks, index) {
 	}
 }
 
-function createTree(decodedTasks) {
-	for(i = 0;i < decodedTasks.length;i++) {
-		if(decodedTasks[i].parent === 'none') {
-			tree[0] = decodedTasks[i];
-			tree[0].parentId = -1;
-			tree[0].pos = 0;
-			taskNum = 1;
-			break;
-		}
-	}
-}
-
-function buildTree(tasks, index) {
-	const parentTask = tree[index];
-	const temp = [];
-
-	for(i = 0;i < tasks.length;i++) {
-		if(tasks[i].parent === parentTask.name) {
-			tasks[i].parentId = index;
-			tasks[i].pos = tree.length;
-			tree.push(tasks[i]);
-			buildTree(tasks, tree.length-1);
-		}
-	}
-}
-
+//Decode all of the artifacts received from the server
+//and add each to the artifacts array
 function decodeArtifacts(encodedArtifacts) {
 	const parts = encodedArtifacts.split("||");
 	const artifacts = [];
@@ -158,6 +140,7 @@ function decodeArtifacts(encodedArtifacts) {
 	return artifacts;
 }
 
+//Decode a task received from the server and return an object with it's information
 function decode(encodedTask) {
 	const parts = encodedTask.split('#@#');
 	taskIds[parts[0]] = "task-id-" + taskNum;
@@ -180,12 +163,6 @@ function decode(encodedTask) {
 			return {"note": parts[0], "datetime": parts[1]};
 		}) : [],
 	}
-}
-
-function addTask(encodedTask) {
-	if(!encodedTask) return;
-	const task = decode(encodedTask);
-	addChildTask('Steps', task, true, task);
 }
 
 //Add a child task to the specified parent task

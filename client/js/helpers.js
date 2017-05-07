@@ -1,16 +1,11 @@
+//Returns a string with the date and time
 function getDateTime(){
 	var today = new Date();
 	var date = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
 	var time = today.getHours() + ":" + ("0" + today.getMinutes()).slice(-2);
 	return date + " " + time;
 }
-function getDateTimeObject(){
-	var dateObj = {};
-	var today = new Date();
-	dateObj["date"] = (today.getMonth()+1) + "/" + today.getDate() + "/" + today.getFullYear();
-	dateObj["time"] = today.getHours() + ":" + today.getMinutes();
-	return dateObj;
-}
+//Retrieve a cookie from the users browser
 function getCookie(cname) {
 	var name = cname + "=";
 	var decodedCookie = decodeURIComponent(document.cookie);
@@ -26,30 +21,40 @@ function getCookie(cname) {
 	}
 	return "";
 }
+//Set a new cookie to save information in the user's browser
 function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
 	d.setTime(d.getTime() + (exdays*24*60*60*1000));
 	var expires = "expires="+ d.toUTCString();
 	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+//Generate a post documentation PDF based on the current process progress
 function generatePostDoc(){
+	//Get the post doc table elements
 	var table = $("#post-documentation-table");
 	var tableBody = $("#post-documentation-table tbody");
 
+	//Show the table while generating post doc (needed for export to PDF to work)
 	table.show();
+
+	//Remove all html from the table
 	tableBody.html("");
 
+	//Loop through all tasks in the tree
 	for(var i = 0; i < tree.length; i++){
 		var task = tree[i];
 		if(!task.isLeaf) continue;
 		var comments = "";
 
+		//Create a comment string with all comments from the current task
 		for(var j = 0; j < task.comments.length; j++){
 			comments = comments + task.comments[j].note + "<br/>";
 		}
 
+		//Add a date to the task if it is null
 		if(task.date === null) task.date = getDateTime();
 
+		//Add a new row to the table
 		var html = "<tr>";
 
 		html = html + "<td>" + task.name + "</td>";
@@ -69,17 +74,27 @@ function generatePostDoc(){
 		tableBody.append(html);
 	}
 
-
+	//Create a new HTML to PDF object
+	//param (l) -- landscape
+	//param (mm) -- millimeters
 	var doc = new jsPDF('l', 'mm');
 
+	//Create a canvas object from the HTML post doc table
 	html2canvas($("#post-documentation-table"), {background: "white"}).then(function(canvas) {
+		//Convert the HTML canvas to an image
 		var imgData = canvas.toDataURL("image/jpeg", 1);
+		
+		//Add the image of the post doc table to the PDF
 		doc.addImage(imgData, 'PNG', 0, 0);
+		
+		//Download the post doc PDF 
 		doc.save("post-doc.pdf");
 
+		//Hide the post doc HTML table
 		table.hide();
 	});
 }
+//Reset the colors to the defaults
 function revertToDefaultColors(){
 
 	var defaultColorSettings = [
@@ -104,6 +119,7 @@ function revertToDefaultColors(){
 
 	$('.colorpicker-component').colorpicker('update');
 }
+//Show a new modal window
 function showModal(id, header, body, footer){
 	if($("#" + id).length > 0) $("#" + id).remove();
 
