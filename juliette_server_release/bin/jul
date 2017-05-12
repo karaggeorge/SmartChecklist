@@ -3,7 +3,7 @@
 JULIETTE_HOSTNAME=`hostname`
 
 # Get the canonical path to home directory
- 
+
 BINDIR="`dirname $0`"
 if [ "${BINDIR:0:1}" != "/" ]; then
   BINDIR="${PWD}/${BINDIR}"
@@ -41,7 +41,7 @@ if [ -z ${CYGWIN} ]; then
   AGENT_SECURITY_POLICY="-Djava.security.manager -Djava.security.policy=${ETCDIR}/agent.pol"
   INSTALL_DIR_PROPERTY="-Dinstall.dir=${INSTALLDIR}"
   SERVER_CLASSPATH="-cp ${LIBDIR}/juliette-server.jar"
-  CLIENT_CLASSPATH="-cp ${LIBDIR}/juliette-client.jar"
+  CLIENT_CLASSPATH="-cp ${LIBDIR}/juliette-client.jar:$CLASSPATH"
 else
   SERVER_SECURITY_PROPERTY="-Djava.security.manager -Djava.security.policy=\"`cygpath -wp "${ETCDIR}/juliette.pol"`\""
   AGENT_SECURITY_POLICY="-Djava.security.manager -Djava.security.policy=\"`cygpath -wp "${ETCDIR}/agent.pol"`\""
@@ -59,7 +59,7 @@ case ${CMD} in
   start)
     if [ -r "${PIDFILE}" ]; then
       echo "jul: daemon already started."
-    else  
+    else
       java ${MAX_HEAP_SIZE} ${SERVER_CLASSPATH} ${SERVER_SECURITY_PROPERTY} ${RMI_CODEBASE_PROPERTY} ${INSTALL_DIR_PROPERTY} laser.juliette.driver.Driver &
       echo $! > "${PIDFILE}"
     fi

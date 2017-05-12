@@ -27,6 +27,8 @@
 *.sql
 *.sqlite
 
+/bin/*
+
 !juls-and-scripts/juliette-client.jar
 !juliette_server_release/**
 

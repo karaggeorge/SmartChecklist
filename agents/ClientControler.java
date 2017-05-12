@@ -1,6 +1,8 @@
-package laser.bt.agents;
+package agents;
 
 import laser.juliette.ams.AgendaItem;
+import laser.juliette.ams.AgendaItemListener;
+import laser.juliette.ams.AgendaItemEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +39,7 @@ public class ClientControler {
         mercutio.postItem(encode(p.getParent()));
         p = p.getParent();
       }
+
       item.start();
     } catch (Exception e) {
       e.printStackTrace();
@@ -51,6 +54,21 @@ public class ClientControler {
       while(p.getStep().hasParent()) {
         p = p.getParent();
       }
+
+      p.addAgendaItemListener(new AgendaItemListener() {
+        public void cancelled(AgendaItemEvent event) { }
+        public void optedOut(AgendaItemEvent event) { }
+        public void retracted(AgendaItemEvent event) { }
+        public void started(AgendaItemEvent event) { }
+
+        public void completed(AgendaItemEvent event) {
+          mercutio.end(true);
+        }
+
+        public void terminated(AgendaItemEvent event) {
+          mercutio.end(false);
+        }
+      });
 
       InterfaceDeclarationSet declSet = p.getStep().getDeclarations(DeclarationKind.LOCAL_PARAMETER);
 			if ((declSet != null) && (! declSet.isEmpty())) {
@@ -70,8 +88,12 @@ public class ClientControler {
   }
 
   public boolean completeItem(String itemName) {
+    System.out.println("COMPLETE ITEM WAS CALLED");
     AgendaItem item = findItemByName(itemName);
-    if(item == null) return false;
+    if(item == null) {
+      System.out.println("Item not found " + itemName);
+      return false;
+    }
 
     try {
       item.complete();
@@ -100,7 +122,6 @@ public class ClientControler {
 				Class currentExceptionsThrownClass = Class.forName(fullyQualifiedExceptionName);
 				Serializable currentExceptionThrownInst = (Serializable)currentExceptionsThrownClass.newInstance();
 				exceptionsThrown.add(currentExceptionThrownInst);
-				System.out.println("\tIs throwing exception " + currentExceptionThrownInst.getClass().getName());
 			} catch (ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -357,7 +378,6 @@ public class ClientControler {
   private static String getFullyQualifiedName(String humanReadableName) {
     for (int i = 0; i < installedExceptionDecls.size(); i++) {
       if(createHumanReadableName(installedExceptionDecls.get(i)).equals(humanReadableName)) {
-        System.out.println("FOUND " + installedExceptionDecls.get(i));
         return installedExceptionDecls.get(i);
       }
     }

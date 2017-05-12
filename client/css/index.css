@@ -1,3 +1,86 @@
+/* Header */
+#process-info{
+	background-color: #61B56E;
+}
+
+.time{
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.mb40{
+	margin-bottom: 40px;
+}
+
+.relative{
+	position: relative;
+}
+
+.block{
+	display: block;
+}
+
+.uppercase{
+	text-transform: uppercase;
+}
+
+#post-documentation-table{
+	display:none;
+	width: 1100px;
+}
+
+.parent-chevron{
+	position: absolute;
+	right:0;
+	top:0
+}
+
+#patient-info{
+	background-color: #CEC7C7;
+}
+
+#process-list, #agent-list {
+	width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#connect-error {
+	color: #d9534f;
+	display: none;
+}
+
+.intro-container {
+	display: none;
+}
+
+.input-group-addon {
+	width: 0px;
+	padding: 0;
+}
+
+.colorpicker-component {
+	margin: auto;
+}
+
+.colorpicker-component input {
+	display: none;
+}
+
+.intro-container {
+	background-color: #78F586;
+  margin-top: 10%;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  /*height: 60vh;*/
+  border-radius: 12px;
+  box-shadow: 1px 1px 1px 1px black;
+	padding: 1%;
+
+}
+
 /* Process Tasks Section */
 .scroll-box {
 	font: 24px/36px sans-serif;
@@ -35,7 +118,7 @@
 	padding:0;
 	font-size: 14px;
 	margin-left: 10px;
-  font-style: italic;
+  	font-style: italic;
 }
 .child-task{
 	background-color: #78F586;
@@ -50,18 +133,15 @@
 	width: 100%;
 }
 
-.done,
-.failed {
+.done, .failed {
 	display: none;
 }
 
-.child-task.completed,
-.child-task.terminated {
+.child-task.completed, .child-task.terminated {
 	background-color: #EEE;
 }
 
-.completed .current,
-.terminated .current {
+.completed .current, .terminated .current {
 	display: none;
 }
 

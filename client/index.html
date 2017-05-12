@@ -1,31 +1,535 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Smart Checklists | Choose Agent</title>
+	<title>Smart Checklists | Blood Transfusion Process</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-colorpicker.css">
 	<link rel="stylesheet" href="css/index.css">
 </head>
 <body class="container">
-	
-	<div class="text-center">
-		<h1>Select Agent Type</h1>
 
-		<table class="table table-hover table-bordered table-striped mt10 text-center">
+	<div class="intro">
+		<div class="intro-container intro-start">
+			<h2 class="mb40">Welcome to SmartChecklist</h2>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<p id="connect-error"></p>
+					<label for="process-id" class="col-sm-4 control-label">Join another Process</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="process-id" placeholder="Process ID">
+					</div>
+					<div class="col-sm-1">
+						<button class="btn btn-danger" onclick="connect(document.getElementById('process-id').value)"> Join </button>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="new-process" class="col-sm-4 control-label">Start a new Process</label>
+					<div class="col-sm-offset-4 col-sm-1">
+						<button class="btn btn-danger" id="new-process" onclick="initiate()"> Start </button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="intro-container intro-process">
+			<h2 class="mb40">Select a process</h2>
+			<ul class="list-group" id="process-list">
+			</ul>
+		</div>
+
+		<div class="intro-container intro-agents">
+			<h2 class="mb40">Select an agent</h2>
+			<ul class="list-group" id="agent-list">
+			</ul>
+		</div>
+
+		<div class="intro-container intro-loading block">
+			<h2 class="mb40">Loading ...</h2>
+		</div>
+	</div>
+
+	<div id="intro-list-item" style="display:none">
+		<li class="list-group-item"></li>
+	</div>
+
+	<div class="main-page" style="display:none">
+		<!-- Header with title and agent name -->
+		<header class="mt10">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 hidden-sm hidden-xs">
+					<b>Agent:</b> <span id="cur-agent"></span>
+				</br>
+				<b>Process ID#:</b> <span id="cur-process-id"></span>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<h4 class="text-center">Smart Checklist</h4>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 pull-right">
+				<button onclick="sendMessage('QUIT')" class="btn btn-danger">Quit</button>
+				<button onclick="generatePostDoc()" class="btn btn-primary">Post Documentation</button>
+
+				<button class="btn btn-default" id="settings-btn">
+					<span class="glyphicon glyphicon-cog"></span>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<!-- Patient info section with image and stats -->
+	<section id="patient-info" class="section">
+
+		<span class="glyphicon glyphicon-chevron-up hidden-lg hidden-md pull-right" data-toggle="collapse" data-target="#patient-info-inner"></span>
+
+		<div class="row">
+			<div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+				<img src="img/blankPerson.png" alt="Patient Profile Picture" class="img-responsive">
+			</div>
+
+			<div class="col-lg-9 col-md-9">
+
+				<h3>Geary, Margaret</h3>
+
+				<div class="collapse in" id="patient-info-inner">
+					<div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
+						<h4><b>Gender:</b> Female</h4>
+						<h4><b>Date of Birth:</b> 07/03/1926</h4>
+						<h4><b>Age:</b> 89 years</h4>
+						<h4><b>MRN:</b> 51667154</h4>
+						<h4><b>Room:</b> 204</h4>
+					</div>
+					<div class="col-lg-7 col-md-7 col-sm-6 col-xs-6">
+						<div class="col-lg-6 col-md-6">
+							<h4><b>HR</b> <span id="heart-rate">78</span></h4>
+							<h4><b>TEMP</b> 37.2 &deg;C</h4>
+							<h4><b>PULSE PRESSURE</b> 37</h4>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<h4><b>SYS/DIAS</b> 117/80</h4>
+							<h4><b>SpO2%</b> 98</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Process title and status -->
+	<section id="process-info" class="section">
+		<div class="row mt10">
+			<div class="col-lg-8 col-md-8">
+				<h4 class="uppercase">Transfer one unit of packed red blood cells (PRBCS)</h4>
+			</div>
+			<div class="col-lg-3 col-md-3">
+				<h4><i id="process-status">In-progress</i></h4>
+			</div>
+			<div class="col-lg-1 col-md-1">
+				<img src="img/info.png" alt="Info button" class="info-button" id="process-info-button">
+			</div>
+		</div>
+	</section>
+
+	<!-- Process tasks -->
+	<section class="mt10">
+		<div class="scroll-box container" id="main-task-container">
+			<div class="child-tasks"></div>
+		</div>
+	</section>
+
+	<!-- Process Steps Info -->
+	<div id="process-info-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Process Steps</h4>
+
+					<hr>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse1">Review pertinent patient history and blood transfusion order</a>
+								</h4>
+							</div>
+							<div id="collapse1" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Review patient history</li>
+									<li class="list-group-item">Confirm that order is complete (e.g. includes infusion rate)</li>
+									<li class="list-group-item">Know rationale for blood transfusion</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse2">Perform pre-infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse2" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Confirm presence of informed consent</li>
+									<li class="list-group-item">Confirm appropriate IV catheter access</li>
+									<li class="list-group-item">Assess patient pre-infusion</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse3">Perform infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse3" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Verify patient ID and blood product info</li>
+									<li class="list-group-item">Start infusion of blood product</li>
+									<li class="list-group-item">Assess patient at 15 minutes</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel-group">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" href="#collapse4">Perform post-infusion work</a>
+								</h4>
+							</div>
+							<div id="collapse4" class="panel-collapse collapse">
+								<ul class="list-group">
+									<li class="list-group-item">Assess patient post-infusion</li>
+									<li class="list-group-item">Document infusion info: must include infusion volume</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Notes Modal -->
+	<div id="note-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Notes</h4>
+
+					<hr>
+
+					<div id="old-comments"></div>
+
+					<textarea class="form-control" rows="10" id="note-input"></textarea>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-success" data-dismiss="modal" id="save-note">Save</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Description Modal -->
+	<div id="description-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Task Description</h4>
+
+					<hr>
+
+					<p id="description-text"></p>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Exception Modal -->
+	<div id="exception-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Step Failed</h4>
+					<h5 class="modal-desc"> Indicate what went wrong while performing "<strong id="modal-task"><strong>"</h5>
+
+					<ul class="list-group modal-exception-list">
+					</ul>
+
+					<div class="mt10 pull-right">
+						<button type="button" id='terminate' class="btn btn-success">Ok</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Artifact Modal -->
+	<div id="artifact-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Artifacts</h4>
+
+					<ul class="list-group modal-artifact-list">
+					</ul>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Color Picker Modal -->
+	<div id="color-picker-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+					<h4 class="modal-title page-header">Change Element Color</h4>
+
+					<div class="row mt10">
+						<div class="col-lg-6 col-md-6">
+							<p>Patient Info Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#CEC7C7" data-query="#patient-info" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Process Info Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#61B56E" data-query="#process-info" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Active Parent Task Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#78F586" data-query=".parent-task" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Active Child Task Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#78F586" data-query=".child-task" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Completed Task Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#EEEEEE" data-query=".child-task.completed" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Terminated Task Color:</p>
+						</div>
+
+						<div class="input-group colorpicker-component">
+							<input value="#EEEEEE" data-query=".child-task.terminated" data-change="background-color"/>
+							<span class="input-group-addon"><i></i></span>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<p>Font Size:</p>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<input type="text" value="16" class="form-control" data-query="*" data-change="font-size">
+						</div>
+					</div>
+
+					<div class="mt10 pull-right">
+						<button type="button" class="btn btn-danger" id="set-colors">Set</button>
+						<button type="button" class="btn btn-warning" id="colors-to-default" onclick="revertToDefaultColors()">Reset to Default</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Template modal list item -->
+	<div id="template-exception">
+		<li class="list-group-item exception-item"></li>
+	</div>
+
+	<!-- Template Parent Task -->
+	<div id="template-task" style="display: none">
+		<div align="center" class="task-wrap">
+			<div class="parent-task relative">
+
+				<h3 class="parent-task-title"></h3>
+				<p class="parent-task-sub"></p>
+
+				<span class="glyphicon glyphicon-chevron-up parent-chevron"></span>
+			</div>
+
+			<div class="container child-tasks">
+			</div>
+		</div>
+	</div>
+
+	<!-- Template child task -->
+	<div class="child-task-template" style="display: none">
+		<div class="child-task">
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<h4 class="task-title"></h4>
+				</div>
+
+				<div class="col-lg-6">
+
+					<div class="time col-lg-3"></div>
+
+					<div class="current col-lg-2">
+						<div class="row">
+							<div class="col-lg-6">
+								<img src="img/check.png" alt="" class="check-button">
+							</div>
+							<div class="col-lg-6">
+								<img src="img/x.png" data-toggle="modal" data-target="#exception-modal" class="x-button">
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-2">
+						<div class="col-lg-6 done">
+							<img src="img/checkmark.png" alt="" class="checkmark-button">
+						</div>
+
+						<div class="col-lg-6 failed">
+							<img src="img/redX.png" alt="" class="checkmark-button">
+						</div>
+					</div>
+
+					<div class="col-lg-1 col-lg-offset-2 relative">
+						<img src="img/note.png" class="note-button">
+						<span class="label label-danger label-as-badge note-badge" style="display: none">0</span>
+					</div>
+
+					<div class="col-lg-1">
+						<img src="img/info.png" alt="Info button" class="info-button">
+					</div>
+					<div class="col-lg-1 ">
+						<img src="img/case.png" alt="Artifact button" class="artifact-button" data-toggle="popover" data-placement="top" title="Artifacts" data-content="">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Hidden table to be used to export the post documentation -->
+	<div class="container" id="post-documentation-table">
+		<h1>Transfuse One Unit of Packed Red Blood Cells (PRBCs)</h1>
+		<p>Last Updated: <span class="updated">Fri Jun 24 17:25:39 EDT 2016</span>; Created: <span class="created">Fri Jun 24 17:25:03 EDT 2016</span></p>
+
+		<table class="table table-bordered">
 			<thead>
-				<th class="text-center">Agent Name</th>
-				<th class="text-center">Agent Type</th>
-				<th class="text-center">Process</th>
-			</thead>
-			<tbody>
-				<tr onclick="window.location.href='process.html?agent=nurse';">
-					<td>Lamoureux, Erin</td>
-					<td>Nurse</td>
-					<td>Blood Transfusion</td>
+				<tr>
+					<th colspan="5">Patient Name: Margaret Geary</th>
+					<th colspan="7">MRN#: 51667154</th>
 				</tr>
-			</tbody>
+				<tr>
+					<th>Step</th>
+					<th>Date/Time</th>
+					<th>HR</th>
+					<th>Temp C</th>
+					<th>SpO2 %</th>
+					<th>BP</th>
+					<th>Pulse Pressure</th>
+					<th>Lung Sounds</th>
+					<th>Problems</th>
+					<th>Clinician</th>
+					<th>Notes</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
 		</table>
 	</div>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="js/vendor/jsPDF.js"></script>
+	<script src="js/vendor/html2canvas.js"></script>
+
+	<script src="js/vendor/colorpicker/colorpicker-color.js"></script>
+	<script src="js/vendor/colorpicker/colorpicker-component.js"></script>
+	<script src="js/vendor/colorpicker/colorpicker-defaults.js"></script>
+	<script src="js/vendor/colorpicker/colorpicker-plugin-wrapper.js"></script>
+
+	<script src="js/addTasks.js"></script>
+	<script src="js/helpers.js"></script>
+	<script src="js/listeners.js"></script>
+	<script src="js/websocket.js"></script>
 </body>
 </html>
