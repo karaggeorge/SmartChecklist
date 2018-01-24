@@ -2,6 +2,10 @@
 
 This is a web-based implementation of the smart checklists for guiding process performers.
 
+## Full Overview and Demo Presentation
+
+This is our [Capstone Demo Presentation]( http://capture.quinnipiac.edu/recordings/GKaragkiaouris/SER_Final_Demo/SER_Final_Demo_-_20170503_134924_15.html)
+
 ## Installation Guide:
 1. Make sure you are logged in as an administrator on your computer; otherwise the script executed from the Java code might not have permission to run.
 2. Clone (or download and extract) this repository
